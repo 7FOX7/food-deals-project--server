@@ -1,0 +1,162 @@
+// we will be storing food categories: 
+// NOTE: food categories MUST match 'FoodTypes' type from our client app
+export enum ProductCategories {
+    FreshProduce = "Fresh Produce",
+    MeatAndSeafood = "Meat & Seafood", 
+    DairyAndEggs = "Dairy & Eggs", 
+    FrozenAndPrepared = "Frozen & Prepared Foods", 
+    BakeryAndBreakfast = "Bakery & Breakfast", 
+    SnacksAndSweets = "Snacks & Sweets", 
+    PantryAndEssentials = "Pantry & Essentials", 
+
+    // this category will be used as a placeholder for the product 
+    // whose food category does not match any of the above (DON'T USE IT IN YOUR client app)
+    NoCategory = "[NO CATEGORY]"
+}
+
+// will be representing a single product 
+export type Product = {
+    imageUri: string, 
+    title: string, 
+    units: string, 
+    primaryPrice: string, 
+    secondaryPrice?: string, 
+    // will be storing ONE of the food categories (no need to chain them with category1 | category2 | category3 etc.)
+    category: ProductCategories, 
+    // TODO: implement the logic for location
+    location?: number            
+}
+
+// will be storing products for store X
+export type Products = Product[]
+
+/**
+ * Will be storing a function for fetching product data for each store
+*/
+export type ProductData = {
+    "Walmart": () => Products, 
+    "No Frills - Supermarket": () => Products,  
+    "Dollarama": () => Products,  
+    "Busy Bee Food Mart": () => Products,  
+    "Outlet Collection at Niagara - Pepper Palace": () => Products,  
+    "Your Deli": () => Products,  
+    "Plaza Fiesta Latin Groceries & Cafe": () => Products,  
+    "Ryan's No Frills": () => Products,  
+    "Antipastos": () => Products,  
+    "Giant Tiger": () => Products,  
+    "Zest Mart": () => Products,  
+    "FreshCo": () => Products,  
+    // TODO: implement
+    "Food Basics": () => Promise<Products>,  
+    "Metro Lakeshore": () => Products,  
+    "La Paisana Latin Groceries": () => Products,  
+    "Al Noor": () => Products,  
+    "Sobeys": () => Products,  
+    "B & R European Deli": () => Products,  
+    "Roman Cheese": () => Products,  
+    "Dinh Dinh Asian Foods": () => Products,  
+    "Independent Grocery Store - Hendriks": () => Products,  
+    "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store": () => Products,  
+    "Commisso's Fresh Food": () => Products,  
+    "Farm Boy": () => Products,  
+    "Thai Binh Asian Food": () => Products,  
+    "The Red Barn Farm Market and Bakery": () => Products,  
+    "Independent Grocery store - Phil's": () => Products,  
+    "Charlie Asian Grocery Inc.": () => Products,  
+    "Patty's Delights Peruvian Culinary": () => Products,  
+    "Gallagher's": () => Products,  
+    "Raja Grocers": () => Products,  
+    "Peanut Mill": () => Products,  
+    "Joe's Your Independent Grocer": () => Products,  
+    "The Indian Valley": () => Products,  
+    "Real Canadian Superstore": () => Products,  
+    "Bodner's Market": () => Products,  
+    "Food Basket": () => Products,  
+    "The Healthy Cupboard": () => Products,  
+    "Costco Wholesale": () => Products,  
+    "Brandon's No Frills": () => Products,  
+    "Pupo's Food Market": () => Products,  
+    "The New Food Box": () => Products,  
+    "Kim's Variety": () => Products,  
+    "Bombay Mart": () => Products,  
+    "Polonia European Market & Deli": () => Products,  
+    "Eastern Food Market": () => Products,  
+    "Foodland": () => Products,  
+    "Lococo's": () => Products,  
+    "Zehrs": () => Products,  
+    "Walmart Supercentre": () => Products,  
+    "Avondale": () => Products,  
+    "Vineland Foodland - Supermarket": () => Products,  
+    "Pistachio's": () => Products,  
+    "Jim's No Frills": () => Products,  
+    "Metro": () => Products,  
+    "Mark's No Frills": () => Products,  
+    "Chippawa Foodland": () => Products,  
+    "Wholesale Club": () => Products,  
+    "Ebeano Super Market": () => Products,  
+}
+
+// will be storing the name of each store we are going to iterate through
+// and for each store call the function and add the product to the firestore
+export const STORE_NAMES: (keyof ProductData)[] = [
+    "Walmart",  
+    "No Frills - Supermarket",   
+    "Dollarama",   
+    "Busy Bee Food Mart",   
+    "Outlet Collection at Niagara - Pepper Palace",   
+    "Your Deli",   
+    "Plaza Fiesta Latin Groceries & Cafe",   
+    "Ryan's No Frills",   
+    "Antipastos",   
+    "Giant Tiger",   
+    "Zest Mart",   
+    "FreshCo",   
+    // TODO: implement
+    "Food Basics",  
+    "Metro Lakeshore",   
+    "La Paisana Latin Groceries",   
+    "Al Noor",   
+    "Sobeys",   
+    "B & R European Deli",   
+    "Roman Cheese",   
+    "Dinh Dinh Asian Foods",   
+    "Independent Grocery Store - Hendriks",   
+    "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store",   
+    "Commisso's Fresh Food",   
+    "Farm Boy",   
+    "Thai Binh Asian Food",   
+    "The Red Barn Farm Market and Bakery",   
+    "Independent Grocery store - Phil's",   
+    "Charlie Asian Grocery Inc.",   
+    "Patty's Delights Peruvian Culinary",   
+    "Gallagher's",   
+    "Raja Grocers",   
+    "Peanut Mill",   
+    "Joe's Your Independent Grocer",   
+    "The Indian Valley",   
+    "Real Canadian Superstore",   
+    "Bodner's Market",   
+    "Food Basket",   
+    "The Healthy Cupboard",   
+    "Costco Wholesale",   
+    "Brandon's No Frills",   
+    "Pupo's Food Market",   
+    "The New Food Box",   
+    "Kim's Variety",   
+    "Bombay Mart",   
+    "Polonia European Market & Deli",   
+    "Eastern Food Market",   
+    "Foodland",   
+    "Lococo's",   
+    "Zehrs",   
+    "Walmart Supercentre",   
+    "Avondale",   
+    "Vineland Foodland - Supermarket",   
+    "Pistachio's",   
+    "Jim's No Frills",   
+    "Metro",   
+    "Mark's No Frills",   
+    "Chippawa Foodland",   
+    "Wholesale Club",   
+    "Ebeano Super Market",  
+]
