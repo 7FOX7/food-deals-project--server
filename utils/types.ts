@@ -18,13 +18,10 @@ export enum ProductCategories {
 export type Product = {
     imageUri: string, 
     title: string, 
+    primaryPrice: string,  
     units: string, 
-    primaryPrice: string, 
-    secondaryPrice?: string, 
-    // will be storing ONE of the food categories (no need to chain them with category1 | category2 | category3 etc.)
-    category: ProductCategories, 
-    // TODO: implement the logic for location
-    location?: number            
+    // will be storing ONE of the food categories
+    category: ProductCategories,     
 }
 
 // will be storing products for store X
@@ -83,7 +80,7 @@ export type ProductData = {
     "Eastern Food Market": () => Products,  
     "Foodland": () => Products,  
     "Lococo's": () => Products,  
-    "Zehrs": () => Products,  
+    "Zehrs": () => Promise<Products>,  
     "Walmart Supercentre": () => Products,  
     "Avondale": () => Products,  
     "Vineland Foodland - Supermarket": () => Products,  
