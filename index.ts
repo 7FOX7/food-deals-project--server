@@ -52,9 +52,7 @@ const productData: ProductData = {
         // will be storing products we will be pushing to the array: 
         const products: Products = []
         // will be representing a browser: 
-        const browser = await puppeteer.launch({
-            headless: false
-        })
+        const browser = await puppeteer.launch()
         // TODO: add a cron job logic
         // create a new page
         const page = await browser.newPage()
@@ -702,9 +700,7 @@ category: ProductCategories.NoCategory
         // will be storing products we will be pushing to the array: 
         const products: Products = []
         // will be representing a browser: 
-        const browser = await puppeteer.launch({
-            headless: false
-        })
+        const browser = await puppeteer.launch()
         // TODO: add a cron job logic
         // create a new page
         const page = await browser.newPage()
@@ -797,9 +793,6 @@ category: ProductCategories.NoCategory
                 // press on the button to go to the next page and wait 
                 // till it actually navigates
                 await Promise.all([
-                    // page.waitForNavigation({
-                    //     waitUntil: "networkidle2"
-                    // }), 
                     page.waitForSelector("#results-container"), 
                     page.click("[data-testid=NextPage]")
                 ])
@@ -811,7 +804,7 @@ category: ProductCategories.NoCategory
         }
         catch (err: any) {
             console.error(`Something went wrong. Was able to get only ${products.length} products: ` + err.message)
-            // still return products that have been added: 
+           // still return products that have been added: 
             return products
         }  
         // will be executed regardless
@@ -890,12 +883,28 @@ function updateProducts() {
     console.log("will promise to update products at 3AM")
 
     // schedule a cron job to run every night at 3AM
-    schedule("36 * * * *", async () => {
+    schedule("49 * * * *", async () => {
         try {
             // get the products 
             for (let storeName of STORE_NAMES) {
                 // skip adding products for this store as it will break our loop
                 if (storeName === "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store") continue
+                // skip adding products for this store
+                if (storeName === "Walmart Supercentre") continue
+                // if current store is Walmart, then add the same products to the Walmart Supercentre (they have the same products anyway)
+                if (storeName === "Walmart") {
+                    const products = await productData[storeName]()
+                    // create a collection reference
+                    const collectionRef = collection(db, "/stores-and-products")
+                    // add products for Walmart
+                    await Promise.all([
+                        setDoc(doc(collectionRef, "Walmart"), { products }), 
+                        // add the same products for Walmart Supercentre
+                        setDoc(doc(collectionRef, "Walmart Supercentre"), { products })
+                    ])
+                    // go to the next
+                    continue
+                }
                 const products = await productData[storeName]()
                 // create a collection reference
                 const collectionRef = collection(db, "/stores-and-products")
