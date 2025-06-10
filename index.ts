@@ -26,13 +26,7 @@ const productData: ProductData = {
     // NOTE: 
     // - `data` is shared between all stores that start with `Walmart` (they contain the same products anyway)
     "Walmart": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
-    "No Frills - Supermarket": () => [{
-        imageUri: "No Frills - Supermarket", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "No Frills - Supermarket": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Dollarama": () => [{
         imageUri: "No Frills - Supermarket", 
         title: "hello from product data (server)", 
@@ -68,13 +62,7 @@ category: ProductCategories.NoCategory
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Ryan's No Frills": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Ryan's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Antipastos": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -286,13 +274,7 @@ category: ProductCategories.NoCategory
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Brandon's No Frills": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Brandon's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Pupo's Food Market": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -374,13 +356,7 @@ category: ProductCategories.NoCategory
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Jim's No Frills": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Jim's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Metro": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -388,13 +364,7 @@ category: ProductCategories.NoCategory
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Mark's No Frills": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Chippawa Foodland": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -449,7 +419,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = productData["Dollarama"]()
+        const products = await productData["Food Basics"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
@@ -458,8 +428,8 @@ async function testProducts() {
     }   
 }
 
-// testProducts()
-updateProducts()
+testProducts()
+// updateProducts()
 
 /*
     1. Question: firebase-config.ts file - will I be able to to import the variables from it in my APIs, or not (when preparing my project for production)?
