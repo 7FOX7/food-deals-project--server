@@ -2,7 +2,7 @@ import {ProductData} from "./types"
 // will be representing the amount of products we want to store in the array
 // NOTE: the final product count might differ depending on how many products 
 // there are in the page: 
-export const LIMIT_PRODUCT_COUNT = 200
+export const LIMIT_PRODUCT_COUNT = 170
 // will be representing a delay time before sending a new request for the page if we get `500` status code (server error)
 // NOTE: we'll be using it if we could not connect to the page because of the server error
 // or could not get a response in the first place: 
@@ -24,7 +24,6 @@ export const STORE_NAMES: (keyof ProductData)[] = [
     "Giant Tiger",   
     "Zest Mart",   
     "FreshCo",   
-    // TODO: implement
     "Food Basics",  
     "Metro Lakeshore",   
     "La Paisana Latin Groceries",   
