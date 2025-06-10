@@ -53,7 +53,7 @@ const getData = async (): Promise<Products> => {
         try {
             // connect to the specified url (watch page number)
             const response = await page.goto(`https://www.foodbasics.ca/search-page-${pageNum}?sortOrder=relevance&filter=%3Arelevance%3Adeal%3AFlyer+%26+Deals&fromEcomFlyer=true`, {
-                waitUntil: "networkidle2"
+                waitUntil: "domcontentloaded"
             })
             // if connection to the page failed (and it is not our API's fault, then send a new request after delay time)
             if (!response || /^5[0-9][0-9]$/.test(response.status().toString())) {
