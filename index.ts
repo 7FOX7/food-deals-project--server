@@ -158,8 +158,7 @@ const productData: ProductData = {
         }
         catch (err: any) {
             console.error(`Something went wrong. Was able to get only ${products.length} products: ` + err.message)
-            // still return an empty array: 
-            // return []
+           // still return products that have been added: 
             return products
         }  
         // will be executed regardless
@@ -338,8 +337,8 @@ category: ProductCategories.NoCategory
             }
             catch (err: any) {
                 console.error("Something went wrong: " + err.message)
-                // still return an empty array: 
-                return []
+                // still return products that have been added: 
+                return products
             }  
             // will be executed regardless
             finally {
@@ -686,8 +685,8 @@ category: ProductCategories.NoCategory
             }
             catch (err: any) {
                 console.error("Something went wrong: " + err.message)
-                // still return an empty array: 
-                return []
+                // still return products that have been added: 
+                return products
             }  
             // will be executed regardless
             finally {
@@ -812,8 +811,7 @@ category: ProductCategories.NoCategory
         }
         catch (err: any) {
             console.error(`Something went wrong. Was able to get only ${products.length} products: ` + err.message)
-            // still return an empty array: 
-            // return []
+            // still return products that have been added: 
             return products
         }  
         // will be executed regardless
@@ -892,7 +890,7 @@ function updateProducts() {
     console.log("will promise to update products at 3AM")
 
     // schedule a cron job to run every night at 3AM
-    schedule("0 3 */2 * *", async () => {
+    schedule("36 * * * *", async () => {
         try {
             // get the products 
             for (let storeName of STORE_NAMES) {
