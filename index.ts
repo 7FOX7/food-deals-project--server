@@ -4,6 +4,11 @@ import {schedule} from "node-cron"
 import puppeteer from "puppeteer"
 import {getProductCategory__funcBody} from "./utils/product-categories-regex"
 import {Product, Products, ProductData, STORE_NAMES} from "./utils/types"
+import {writeFile} from "fs"
+// import StealthPlugin from "puppeteer-extra-plugin-stealth"
+
+// enable the stealth plugin
+// puppeteer.use(StealthPlugin())
 
 // default for unavailable product data
 enum Unavailable {
@@ -43,13 +48,126 @@ const MAX_RETRIES = 3
 // TODO: create an object which is going to contain names of stores as keys
 // and an async function for fetching (or scraping) product data as values
 const productData: ProductData = {
-    "Walmart": () => [{
-        imageUri: "Walmart", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }], 
+    "Walmart": async (): Promise<Products> => {
+        // will be storing products we will be pushing to the array: 
+        const products: Products = []
+        // will be representing a browser: 
+        const browser = await puppeteer.launch({
+            headless: false
+        })
+        // TODO: add a cron job logic
+        // create a new page
+        const page = await browser.newPage()
+        // set the user agent (request will fail without setting it)
+        await page.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
+        // set extra HTTP headers (strongly recommended)
+        await page.setExtraHTTPHeaders({
+            "Accept-Language": "en-US,en;q=0.9"
+        })
+
+        try {
+            // connect to the specified url (watch page number)
+            const response = await page.goto(`https://www.walmart.ca/en/shop/weekly-flyer-features/6000196190101`, {
+                // set it to `networkidle0`, otherwise, it might block us when we go to the 2nd page
+                waitUntil: "networkidle2", 
+                // set referer (request will fail without it)
+                referer: "https://www.walmart.ca"
+            })
+            // if connection to the page failed (and it is not our API's fault, then send a new request after delay time)
+            if (!response || /^5[0-9][0-9]$/.test(response.status().toString())) {
+                // return an error
+                const reason = await response?.content()
+                throw new Error("Server error: " + reason?.toString())
+            }
+            // if connection to the page failed and this is our API's fault, then throw an error
+            else if (/^4[0-9][0-9]$/.test(response.status().toString())) {
+                // return an error
+                const reason = await response.content()
+                throw new Error("Check if a client request is valid: " + reason.toString())
+            }
+
+            // recursive function we will be calling every time
+            // to go to the next page (there are no products left in the current page)
+            const addProducts = async (): Promise<Products> => {
+                // check if we should add more products to the array: 
+                if (products.length >= LIMIT_PRODUCT_COUNT) return products
+                // get the page content
+                const content = await page.content()
+                // write a file
+                // NOTE: 
+                // - will help us to check if by the time we extract the content a `Forbidden` error was not thrown
+                writeFile("my-file.txt", content, () => {
+                    console.log("file written success")
+                })
+                
+                // get the string version of `htmlContent`
+                const htmlContent = await page.$eval("#results-container", div => div.nextElementSibling?.outerHTML)
+                // check if there is an `htmlContent`
+                if (!htmlContent) throw new Error("Could not generate a new html content. Make sure `#results-container` exists on Walmart's page")
+                // NOTE: 
+                // - `[data-ite-id]` selector is like selecting by a class name but is more specific
+                // - in this case this will return `div` elements
+                const currentProducts = await page.$$eval("[data-item-id]", (divProducts, getProductCategory__funcBody) => {
+                    // pass a param productTitle, and a function body.
+                    // This will create a new function which will be accepting 'productTitle'
+                    const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
+                    return divProducts.flatMap(div => {
+                        // get the product's title
+                        const title = div.querySelector("[data-automation-id=product-title]")?.textContent ?? Unavailable.Title
+                        // get the products's price
+                        // NOTE: 
+                        // method `.replace(/(\$|now)/ig, "").trim()` - replaces all occurences of `$` and `now` with empty string
+                        const primaryPrice = div.querySelector("[data-automation-id=product-price]")?.firstElementChild?.textContent?.replace(/(\$|now)/ig, "").trim() ?? Unavailable.PrimaryPrice
+                        // get the product's units
+                        const units = div.querySelector("[data-automation-id=product-price]")?.lastElementChild?.textContent ?? Unavailable.Units
+                        // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
+                        const category: ProductCategories = getProductCategory(title)
+                        // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                        // by returning [] (this will be flattened -> as if a product never added)
+                        if (category === ProductCategories.NoCategory) return []
+                        // get a new product
+                        const product: Product = {
+                            imageUri: "my image", 
+                            title, 
+                            primaryPrice, 
+                            units, 
+                            category, 
+                        }
+
+                        return product
+                    })
+                }, getProductCategory__funcBody)  
+                
+                // add products from the current page to the global products
+                products.push(...currentProducts)
+                // wait for a bit
+                await new Promise(resolve => setTimeout(resolve, 6000))
+                // log should appear in X time (just to make sure you are actually waiting)
+                console.log("now, try again!")
+                // press on the button to go to the next page and wait 
+                // till it actually navigates
+                await Promise.all([
+                    page.waitForSelector("#results-container"), 
+                    page.click("[data-testid=NextPage]")
+                ])
+                // call the function again
+                return await addProducts()
+            }
+
+            return await addProducts()
+        }
+        catch (err: any) {
+            console.error(`Something went wrong. Was able to get only ${products.length} products: ` + err.message)
+            // still return an empty array: 
+            // return []
+            return products
+        }  
+        // will be executed regardless
+        finally {
+            // close the browser
+            await browser.close()
+        }
+    },   
     "No Frills - Supermarket": () => [{
         imageUri: "No Frills - Supermarket", 
         title: "hello from product data (server)", 
@@ -581,13 +699,129 @@ category: ProductCategories.NoCategory
         // start function execution
         return await addProducts(pageNum)
     }, 
-    "Walmart Supercentre": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Walmart Supercentre": async (): Promise<Products> => {
+        // will be storing products we will be pushing to the array: 
+        const products: Products = []
+        // will be representing a browser: 
+        const browser = await puppeteer.launch({
+            headless: false
+        })
+        // TODO: add a cron job logic
+        // create a new page
+        const page = await browser.newPage()
+        // set the user agent (request will fail without setting it)
+        await page.setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
+        // set extra HTTP headers (strongly recommended)
+        await page.setExtraHTTPHeaders({
+            "Accept-Language": "en-US,en;q=0.9"
+        })
+
+        try {
+            // connect to the specified url (watch page number)
+            const response = await page.goto(`https://www.walmart.ca/en/shop/weekly-flyer-features/6000196190101`, {
+                // set it to `networkidle0`, otherwise, it might block us when we go to the 2nd page
+                waitUntil: "networkidle2", 
+                // set referer (request will fail without it)
+                referer: "https://www.walmart.ca"
+            })
+            // if connection to the page failed (and it is not our API's fault, then send a new request after delay time)
+            if (!response || /^5[0-9][0-9]$/.test(response.status().toString())) {
+                // return an error
+                const reason = await response?.content()
+                throw new Error("Server error: " + reason?.toString())
+            }
+            // if connection to the page failed and this is our API's fault, then throw an error
+            else if (/^4[0-9][0-9]$/.test(response.status().toString())) {
+                // return an error
+                const reason = await response.content()
+                throw new Error("Check if a client request is valid: " + reason.toString())
+            }
+
+            // recursive function we will be calling every time
+            // to go to the next page (there are no products left in the current page)
+            const addProducts = async (): Promise<Products> => {
+                // check if we should add more products to the array: 
+                if (products.length >= LIMIT_PRODUCT_COUNT) return products
+                // get the page content
+                const content = await page.content()
+                // write a file
+                // NOTE: 
+                // - will help us to check if by the time we extract the content a `Forbidden` error was not thrown
+                writeFile("my-file.txt", content, () => {
+                    console.log("file written success")
+                })
+                
+                // get the string version of `htmlContent`
+                const htmlContent = await page.$eval("#results-container", div => div.nextElementSibling?.outerHTML)
+                // check if there is an `htmlContent`
+                if (!htmlContent) throw new Error("Could not generate a new html content. Make sure `#results-container` exists on Walmart's page")
+                // NOTE: 
+                // - `[data-ite-id]` selector is like selecting by a class name but is more specific
+                // - in this case this will return `div` elements
+                const currentProducts = await page.$$eval("[data-item-id]", (divProducts, getProductCategory__funcBody) => {
+                    // pass a param productTitle, and a function body.
+                    // This will create a new function which will be accepting 'productTitle'
+                    const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
+                    return divProducts.flatMap(div => {
+                        // get the product's title
+                        const title = div.querySelector("[data-automation-id=product-title]")?.textContent ?? Unavailable.Title
+                        // get the products's price
+                        // NOTE: 
+                        // method `.replace(/(\$|now)/ig, "").trim()` - replaces all occurences of `$` and `now` with empty string
+                        const primaryPrice = div.querySelector("[data-automation-id=product-price]")?.firstElementChild?.textContent?.replace(/(\$|now)/ig, "").trim() ?? Unavailable.PrimaryPrice
+                        // get the product's units
+                        const units = div.querySelector("[data-automation-id=product-price]")?.lastElementChild?.textContent ?? Unavailable.Units
+                        // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
+                        const category: ProductCategories = getProductCategory(title)
+                        // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                        // by returning [] (this will be flattened -> as if a product never added)
+                        if (category === ProductCategories.NoCategory) return []
+                        // get a new product
+                        const product: Product = {
+                            imageUri: "my image", 
+                            title, 
+                            primaryPrice, 
+                            units, 
+                            category, 
+                        }
+
+                        return product
+                    })
+                }, getProductCategory__funcBody)  
+                
+                // add products from the current page to the global products
+                products.push(...currentProducts)
+                // wait for a bit
+                await new Promise(resolve => setTimeout(resolve, 6000))
+                // log should appear in X time (just to make sure you are actually waiting)
+                console.log("now, try again!")
+                // press on the button to go to the next page and wait 
+                // till it actually navigates
+                await Promise.all([
+                    // page.waitForNavigation({
+                    //     waitUntil: "networkidle2"
+                    // }), 
+                    page.waitForSelector("#results-container"), 
+                    page.click("[data-testid=NextPage]")
+                ])
+                // call the function again
+                return await addProducts()
+            }
+
+            return await addProducts()
+        }
+        catch (err: any) {
+            console.error(`Something went wrong. Was able to get only ${products.length} products: ` + err.message)
+            // still return an empty array: 
+            // return []
+            return products
+        }  
+        // will be executed regardless
+        finally {
+            // close the browser
+            await browser.close()
+        }
+    },   
     "Avondale": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -682,15 +916,14 @@ function updateProducts() {
 
 async function testProducts() {
     console.log("will promise to execute!")
-    // schedule("39 * * * *", async () => {
-        try {
-        const products = await productData["Food Basics"]()
+    try {
+        const products = await productData["Walmart"]()
         console.log("products: " + JSON.stringify(products))
-        }
-        catch (err: any) {
-            console.error("failed to update products: " + err.me)
-        }   
-    // })
+        console.log("products length: " + products.length)
+    }
+    catch (err: any) {
+        console.error("failed to update products: " + err.me)
+    }   
 }
 
 // testProducts()
@@ -714,4 +947,8 @@ updateProducts()
     
 
     => No, you DON'T need to pull everything to a single file, you can still have 'firebase config' in a separate file, and import variables from it, because your 'build' folder will be a representation of your current workspace, and, when added to the server, it will be served as it is. 
+*/
+
+/*
+
 */

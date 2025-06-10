@@ -31,7 +31,7 @@ export type Products = Product[]
  * Will be storing a function for fetching product data for each store
 */
 export type ProductData = {
-    "Walmart": () => Products, 
+    "Walmart": () => Promise<Products>, 
     "No Frills - Supermarket": () => Products,  
     "Dollarama": () => Products,  
     "Busy Bee Food Mart": () => Products,  
@@ -81,7 +81,7 @@ export type ProductData = {
     "Foodland": () => Products,  
     "Lococo's": () => Products,  
     "Zehrs": () => Promise<Products>,  
-    "Walmart Supercentre": () => Products,  
+    "Walmart Supercentre": () => Promise<Products>,  
     "Avondale": () => Products,  
     "Vineland Foodland - Supermarket": () => Products,  
     "Pistachio's": () => Products,  
