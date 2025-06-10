@@ -306,7 +306,7 @@ category: ProductCategories.NoCategory
                     return divProducts.flatMap(div => {
                         const title = div.querySelector("div.head__title")?.textContent ?? Unavailable.Title
                         // get the primary price and remove all the '$' from it
-                        const primaryPrice = div.querySelector("span.price-update")?.textContent?.replaceAll("$", "") ?? Unavailable.PrimaryPrice
+                        const primaryPrice = div.querySelector("span.price-update")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
                         const secondaryPrice = div.querySelector("div.pricing__secondary-price span")?.textContent ?? ""
                         // merge units with secondary price into a single string
                         const units = div.querySelector("span.head__unit-details")?.textContent?.concat(`, ${secondaryPrice}`) ?? Unavailable.Units
@@ -657,7 +657,7 @@ category: ProductCategories.NoCategory
                     return divProducts.flatMap(div => {
                         const title = div.querySelector("h3.css-6qrhwc")?.textContent ?? Unavailable.Title
                         // get the primary price and remove all the '$' from it
-                        const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.replaceAll("$", "") ?? Unavailable.PrimaryPrice
+                        const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
                         const units = div.querySelector("p.css-1yftjin")?.textContent ?? Unavailable.Units
                         // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                         const category: ProductCategories = getProductCategory(title)
