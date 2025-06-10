@@ -393,12 +393,28 @@ function updateProducts() {
     console.log("will promise to update products at 3AM")
 
     // schedule a cron job to run every night at 3AM
-    schedule("28 * * * *", async () => {
+    schedule("1 * * * *", async () => {
         try {
             // get the products 
             for (let storeName of STORE_NAMES) {
                 // skip adding products for this store as it will break our loop
                 if (storeName === "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store") continue
+                // skip adding products for this store
+                if (storeName === "Walmart Supercentre") continue
+                // if current store is Walmart, then add the same products to the Walmart Supercentre (they have the same products anyway)
+                if (storeName === "Walmart") {
+                    const products = await productData[storeName]()
+                    // create a collection reference
+                    const collectionRef = collection(db, "/stores-and-products")
+                    // add products for Walmart
+                    await Promise.all([
+                        setDoc(doc(collectionRef, "Walmart"), { products }), 
+                        // add the same products for Walmart Supercentre
+                        setDoc(doc(collectionRef, "Walmart Supercentre"), { products })
+                    ])
+                    // go to the next
+                    continue
+                }
                 // get products
                 const products = await productData[storeName]()
                 // create a collection reference
@@ -428,8 +444,8 @@ async function testProducts() {
     }   
 }
 
-testProducts()
-// updateProducts()
+// testProducts()
+updateProducts()
 
 /*
     1. Question: firebase-config.ts file - will I be able to to import the variables from it in my APIs, or not (when preparing my project for production)?
