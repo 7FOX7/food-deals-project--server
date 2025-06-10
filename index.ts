@@ -34,13 +34,7 @@ const productData: ProductData = {
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Busy Bee Food Mart": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Busy Bee Food Mart": () => import("./scraping/Busy Bee/data").then(mod => mod.default()),
     "Outlet Collection at Niagara - Pepper Palace": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -393,7 +387,7 @@ function updateProducts() {
     console.log("will promise to update products at 3AM")
 
     // schedule a cron job to run every night at 3AM
-    schedule("1 * * * *", async () => {
+    schedule("8 * * * *", async () => {
         try {
             // get the products 
             for (let storeName of STORE_NAMES) {
@@ -444,8 +438,8 @@ async function testProducts() {
     }   
 }
 
-// testProducts()
-updateProducts()
+testProducts()
+// updateProducts()
 
 /*
     1. Question: firebase-config.ts file - will I be able to to import the variables from it in my APIs, or not (when preparing my project for production)?
