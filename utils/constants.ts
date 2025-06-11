@@ -72,3 +72,5 @@ export const STORE_NAMES: (keyof ProductData)[] = [
     "Wholesale Club",   
     "Ebeano Super Market",  
 ]
+// will be storing email that we use when entering our credentials
+export const EMAIL = "li5estock1234@gmail.com"
