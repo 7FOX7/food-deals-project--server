@@ -36,13 +36,7 @@ category: ProductCategories.NoCategory
     }],  
     "Busy Bee Food Mart": () => import("./scraping/Busy Bee/data").then(mod => mod.default()),
     "Outlet Collection at Niagara - Pepper Palace": () => import("./scraping/Pepper Palace/data").then(mod => mod.default()),
-    "Your Deli": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Your Deli": () => import("./scraping/Your Deli/data").then(mod => mod.default()),
     "Plaza Fiesta Latin Groceries & Cafe": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -423,7 +417,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Outlet Collection at Niagara - Pepper Palace"]()
+        const products = await productData["Your Deli"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
