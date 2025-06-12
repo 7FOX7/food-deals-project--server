@@ -40,7 +40,7 @@ export type ProductData = {
     "Plaza Fiesta Latin Groceries & Cafe": () => Promise<Products>,  
     "Ryan's No Frills": () => Promise<Products>,  
     "Antipastos": () => Promise<Products>,  
-    "Giant Tiger": () => Products,  
+    "Giant Tiger": () => Promise<Products>,  
     "Zest Mart": () => Products,  
     "FreshCo": () => Products,  
     // TODO: implement
