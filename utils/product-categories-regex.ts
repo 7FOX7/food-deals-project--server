@@ -29,11 +29,11 @@ export const getProductCategory__funcBody = `
     // based on the product title, return product category
     if (${frozenProductsRegex}.test(productTitle)) return "${ProductCategories.FrozenAndPrepared}"
     else if (${dairyProductsRegex}.test(productTitle)) return "${ProductCategories.DairyAndEggs}"
-    else if (${meatProductsRegex}.test(productTitle)) return "${ProductCategories.MeatAndSeafood}"
-    else if (${freshProduceRegex}.test(productTitle)) return "${ProductCategories.FreshProduce}"
-    else if (${bakeryProductsRegex}.test(productTitle)) return "${ProductCategories.BakeryAndBreakfast}"
-    else if (${pantryProductsRegex}.test(productTitle)) return "${ProductCategories.PantryAndEssentials}"
     else if (${snacksProductsRegex}.test(productTitle)) return "${ProductCategories.SnacksAndSweets}"
+    else if (${bakeryProductsRegex}.test(productTitle)) return "${ProductCategories.BakeryAndBreakfast}"
+    else if (${meatProductsRegex}.test(productTitle)) return "${ProductCategories.MeatAndSeafood}"
+    else if (${pantryProductsRegex}.test(productTitle)) return "${ProductCategories.PantryAndEssentials}"
+    else if (${freshProduceRegex}.test(productTitle)) return "${ProductCategories.FreshProduce}"
     // will be returned if none of the categories match
     else return "${ProductCategories.NoCategory}"
 `
