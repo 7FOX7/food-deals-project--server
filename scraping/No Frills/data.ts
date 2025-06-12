@@ -36,7 +36,9 @@ const getData = async (): Promise<Products> => {
     // to connect to the page
     let numOfRetries = 0
     // will be representing a browser: 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        headless: false
+    })
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
@@ -86,10 +88,10 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
-                    const title = div.querySelector("h3.css-6qrhwc")?.textContent ?? Unavailable.Title
+                    const title = div.querySelector("h3.css-6qrhwc")?.textContent?.trim() ?? Unavailable.Title
                     // get the primary price and remove all the '$' from it
                     const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
-                    const units = div.querySelector("p.css-1yftjin")?.textContent ?? Unavailable.Units
+                    const units = div.querySelector("p.css-1yftjin")?.textContent?.trim() ?? Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
                     // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product

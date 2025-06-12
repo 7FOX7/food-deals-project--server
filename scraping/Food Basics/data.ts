@@ -36,7 +36,9 @@ const getData = async (): Promise<Products> => {
     // to connect to the page
     let numOfRetries = 0
     // will be representing a browser: 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        headless: false
+    })
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
@@ -86,7 +88,7 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
-                    const title = div.querySelector("div.head__title")?.textContent ?? Unavailable.Title
+                    const title = div.querySelector("div.head__title")?.textContent?.trim() ?? Unavailable.Title
                     // get the primary price and remove all the '$' from it
                     const primaryPrice = div.querySelector("span.price-update")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
                     const secondaryPrice = div.querySelector("div.pricing__secondary-price span")?.textContent ?? ""

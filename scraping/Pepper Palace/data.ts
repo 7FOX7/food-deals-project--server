@@ -36,7 +36,9 @@ const getData = async (): Promise<Products> => {
     // to connect to the page
     let numOfRetries = 0
     // will be representing a browser: 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        headless: false
+    })
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
