@@ -113,7 +113,7 @@ const getData = async (): Promise<Products> => {
                     // wait until the product info will appear on the right
                     await asideFrameContent.waitForSelector("div.primary-info-content")
                     // wait for a bit because it otherwise is not going to find the element
-                    await new Promise(resolve => setTimeout(resolve, 200))
+                    await new Promise(resolve => setTimeout(resolve, 300))
                     // select the content for a single product from the article
                     const product = await asideFrameContent.$eval("div.primary-info-content", (infoContent, getProductCategory__funcBody) => {
                         // pass a param productTitle, and a function body.
