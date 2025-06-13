@@ -81,7 +81,8 @@ const getData = async (): Promise<Products> => {
     let numOfRetries = 0
     // will be representing a browser: 
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: false, 
+        slowMo: 10
     })
     // TODO: add a cron job logic
     // create a new page
@@ -115,29 +116,43 @@ const getData = async (): Promise<Products> => {
                 // TODO: return the cached Product data (firestore)
                 throw new Error("check if a request is valid")
             }
-            // wait for selector
-            await page.waitForSelector('form.search-bar--page input.input-group-field')
             // click on the search input container
-            await page.click('form.search-bar--page input.input-group-field')
+            // await page.click('form.search-bar--page input.input-group-field')
             // wait for the input container
-            await page.waitForSelector("div.dfd-searchbox-main")
+            // await page.waitForSelector("div.dfd-searchbox-main")
             // This will create a new function which will be accepting 'productTitle'
             const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
             // Iterate through each food
             for (const food of foods) {
+                // wait for the input field
+                await page.waitForSelector("form.search-bar--page")
+                await Promise.all([
+                    page.waitForSelector('form.search-bar--page input[type=search]'), 
+                    page.waitForSelector("form.search-bar--page button[type=submit]")
+                ])
                 // type the name of a food to the search input
                 // NOTE: 
                 // - set the delay of at least 25 ms, otherwise, the products will not 
                 // have enough time to load, and you will get a mess
-                await page.type("div.dfd-searchbox-main input", food, { delay: 25 })
-                // get the text content of the container
-                const container = await page.$eval("div.dfd-card-content", div => div.outerHTML)
+                // wait for selector
+                await page.type("form.search-bar--page input[type=search]", food, { delay: 5 })
+                await Promise.all([
+                    page.click("form.search-bar--page button[type=submit]"), 
+                    page.waitForSelector("div.grid__item div.grid-uniform")
+                ])
+                // decide if the container is empty
+                const isContainerEmpty = await page.$eval("div.grid__item div.grid-uniform", div => div.innerText.replace(/(")|( )/gi, "").length === 0)
                 // if there is no a container, this means there is no product, just skip the current product
-                if (!container) continue
+                if (isContainerEmpty) continue
+                // wait for selector
+                await page.waitForSelector("div.grid-product__wrapper")
+                // check if the product is sold out
+                const isSoldOut = await page.$eval("div.grid-product__wrapper", div => div.querySelector("div.grid-product__sold-out"))
+                if (isSoldOut) continue
                 // get the title of the first product that match input
-                const title = await page.$eval("div.dfd-card-title", div => div.textContent?.trim()) ?? Unavailable.Title
+                const title = await page.$eval("span.grid-product__title", div => div.textContent?.trim()) ?? Unavailable.Title
                 // get the title of the first product that match input
-                const primaryPrice = await page.$eval("span.dfd-card-price", span => span.textContent?.replaceAll("$", "").trim()) ?? Unavailable.PrimaryPrice
+                const primaryPrice = await page.$eval("span.grid-product__price", span => span.innerText?.replace(/(regular price)|(\$)|(\+)/gi, "").trim()) ?? Unavailable.PrimaryPrice
                 // units will be empty this time
                 const units = ""
                 // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
@@ -158,9 +173,8 @@ const getData = async (): Promise<Products> => {
                 // add product to the products
                 products.push(product)
                 // clear the input field
-                await page.$eval("div.dfd-searchbox-main input", input => input.value = "")
+                await page.$eval("form.search-bar--page input[type=search]", input => input.value = "")
             }
-
             return products
         }
         catch (err: any) {
