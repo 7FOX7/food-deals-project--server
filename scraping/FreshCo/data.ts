@@ -2,7 +2,6 @@ import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
 import { getProductCategory__funcBody } from "../../utils/product-categories-regex"
 import * as constants from "../../utils/constants"
-import {writeFile} from "fs"
 
 // default for unavailable product data
 enum Unavailable {
@@ -34,14 +33,9 @@ const getData = async (): Promise<Products> => {
     // will be storing the number of retries we made 
     // to connect to the page
     let numOfRetries = 0
-    // will be storing anchor id
-    // NOTE: 
-    // - this will help us to extract product data (there will be multiple containers defined by this id)
-    // - set to 3 because product data is starting with this index
-    const anchorId = 3
     // will be representing a browser: 
     const browser = await puppeteer.launch({
-        headless: false, 
+        headless: false
     })
     // TODO: add a cron job logic
     // create a new page
@@ -76,69 +70,93 @@ const getData = async (): Promise<Products> => {
                 throw new Error("check if a request is valid")
             }
             
-            // wait for the iframe
-            const frame = await page.waitForSelector("iframe.mainframe")
-            if (!frame) throw new Error("no frame")
-            // get the frame content
-            const frameContent = await frame.contentFrame()
+            // wait for the main frame 
+            // NOTE: 
+            // - this is where ALL the products will appear
+            const mainFrame = await page.waitForSelector("iframe.mainframe")
+            if (!mainFrame) throw new Error("`iframe.mainframe` is not found")
+            // get the main frame content
+            const mainFrameContent = await mainFrame.contentFrame()
             // wait for the main container to appear
-            await frameContent.waitForSelector("div[sfml-content-wrap]")
+            await mainFrameContent.waitForSelector("div[sfml-content-wrap]")
+            // wait for the aside frame to appear 
+            // NOTE: 
+            // - `iframe.asideframe` - this should appear on the right, and contain the product information for each individual product
+            const asideFrame = await page.waitForSelector("iframe.asideframe")
+            if (!asideFrame) throw new Error("`iframe.asideframe` is not found")
+            // get the aside frame content
+            const asideFrameContent = await asideFrame.contentFrame()
             // get the count of all the `sfml-flyer-image`
             // NOTE: 
             // - these are the containers where all the product data is stored 
             // - should be roughly 13 containers
-            const flyerSectionCount = await frameContent.$$eval("div[sfml-content-wrap] sfml-flyer-image", divs => divs.length)
-
-
+            const flyerSectionCount = await mainFrameContent.$$eval("div[sfml-content-wrap] sfml-flyer-image", divs => divs.length)
             // starting from the third `sfml-flyer-image` (because the first two contain ad garbage, start selecting all the data we need)
             for (let i = 3; i < flyerSectionCount; i++) {
                 // just in case: wait for the `sfml-flyer-image`
-                await frameContent.waitForSelector(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"]`)    
+                await mainFrameContent.waitForSelector(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"]`)   
+                // get current products
+                const currentProducts = await mainFrameContent.$$(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"] div button`)
+                // iterate through each filtered product and get the data we need
+                for (const currentProduct of currentProducts) {
+                    // get the aria label of the current product
+                    const ariaLabel = await mainFrameContent.evaluate(
+                        el => el.ariaLabel ?? "",
+                        currentProduct
+                    )
+                    // check if the current product is on sale
+                    const isOnSale = /SAVE/gi.test(ariaLabel)
+                    // if it is not, just skip it
+                    if (!isOnSale) continue
+                    // otherwise, press on it
+                    await currentProduct.click()
+                    // wait until the product info will appear on the right
+                    await asideFrameContent.waitForSelector("div.primary-info-content")
+                    // wait for a bit because it otherwise is not going to find the element
+                    await new Promise(resolve => setTimeout(resolve, 200))
+                    // select the content for a single product from the article
+                    const product = await asideFrameContent.$eval("div.primary-info-content", (infoContent, getProductCategory__funcBody) => {
+                        // pass a param productTitle, and a function body.
+                        // This will create a new function which will be accepting 'productTitle'
+                        const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
+                        // get the title 
+                        const title = infoContent.querySelector("h2.primary-info-header")?.textContent?.trim() ?? Unavailable.Title
+                        // get the price
+                        const primaryPrice = infoContent.querySelector("span.price-value")?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                        // get units match 
+                        // NOTE: 
+                        // \d+ - any number of digits
+                        // (\s+)? - any number of whitespaces (if any)
+                        // (g|ea|ml|l|gm|pk) - one of these values. 
 
-                const currentProducts = await frameContent.$$eval(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"] div button`, (currentProducts, getProductCategory__funcBody)=> {
-                    // pass a param productTitle, and a function body.
-                    // This will create a new function which will be accepting 'productTitle'
-                    const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
-
-                    // filter foods
-                    // NOTE: 
-                    // - select only those foods that are on sale
-                    const filteredProducts = currentProducts.filter(currentProduct => /SAVE/gi.test(currentProduct.ariaLabel ?? ""))
-                    
-                    return filteredProducts.flatMap(filteredProduct => {
-                        // get product's label first
-                        const label = filteredProduct.ariaLabel ?? ""
-                        // if label is empty, then just skip working with this product
-                        if (!label) return []
-                        // split the label on `, SAVE`
-                        const [title, price] = label.split(/,.*?SAVE[^,]*,\s*/i)
-                        const priceMatch = price.match(/\d+(\.\d+)?/)
-                        // get the title
-                        title.trim() ?? Unavailable.Title
-                        // get the primary price
-                        const primaryPrice = priceMatch ? priceMatch[0].trim() : Unavailable.PrimaryPrice
+                        // - result: 
+                        // `44ml` - pass
+                        // `44           g` - pass (any number of whitespaces)
+                        // `44 hello g` - fail (only whitespaces between number and unit are allowed)
+                        const unitsMatch = title.match(/\d+(\s+)?(g|ea|ml|l|gm|pk)/i)
                         // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                         const category: ProductCategories = getProductCategory(title)
                         // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
                         // by returning [] (this will be flattened -> as if a product never added)
-                        if (category === ProductCategories.NoCategory) return []
+                        if (category === ProductCategories.NoCategory) return
                         // get a new product
                         const product: Product = {
                             imageUri: "my image", 
                             title, 
                             primaryPrice, 
                             // units will be empty (fuck it)
-                            units: "", 
+                            units: unitsMatch ? unitsMatch[0] : Unavailable.Units, 
                             category, 
                         }
-    
+                        // return product
                         return product
-                    })
-                }, getProductCategory__funcBody)
-
-                products.push(...currentProducts)
+                    }, getProductCategory__funcBody)
+                    
+                    // if there is a valid product then push it to the array
+                    product && products.push(product)
+                }
             }
-
+            
             return products
         }
         catch (err: any) {
