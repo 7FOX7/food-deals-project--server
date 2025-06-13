@@ -42,7 +42,7 @@ export type ProductData = {
     "Antipastos": () => Promise<Products>,  
     "Giant Tiger": () => Promise<Products>,  
     "Zest Mart": () => Products,  
-    "FreshCo": () => Products,  
+    "FreshCo": () => Promise<Products>, 
     // TODO: implement
     "Food Basics": () => Promise<Products>,  
     "Metro Lakeshore": () => Products,  

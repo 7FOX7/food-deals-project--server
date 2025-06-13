@@ -41,20 +41,8 @@ category: ProductCategories.NoCategory
     "Ryan's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Antipastos": () => import("./scraping/Antipastos/data").then(mod => mod.default()),
     "Giant Tiger": () => import("./scraping/Giant Tiger/data").then(mod => mod.default()),
-    "Zest Mart": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
-    "FreshCo": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Zest Mart": () => [],      // no data for this store  
+    "FreshCo": () => import("./scraping/FreshCo/data").then(mod => mod.default()), 
     "Food Basics": () => import("./scraping/Food Basics/data").then(mod => mod.default()), 
     "Metro Lakeshore": () => [{
         imageUri: "hello from product data (server)", 
@@ -399,7 +387,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Giant Tiger"]()
+        const products = await productData["FreshCo"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
