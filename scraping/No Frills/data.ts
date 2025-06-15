@@ -90,13 +90,14 @@ const getData = async (): Promise<Products> => {
                 return divProducts.flatMap(div => {
                     const title = div.querySelector("h3.css-6qrhwc")?.textContent?.trim() ?? Unavailable.Title
                     // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
+                    const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? Unavailable.PrimaryPrice
                     const units = div.querySelector("p.css-1yftjin")?.textContent?.trim() ?? Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
-                    // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if title has more than 40 characters (meaning it will not contain the full title), then skip adding this product
                     // by returning [] (this will be flattened -> as if a product never added)
-                    if (category === ProductCategories.NoCategory) return []
+                    if (category === ProductCategories.NoCategory || title.endsWith("...")) return []
                     // get a new product
                     const product: Product = {
                         imageUri: "my image", 

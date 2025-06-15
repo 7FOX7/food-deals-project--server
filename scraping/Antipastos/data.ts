@@ -153,13 +153,13 @@ const getData = async (): Promise<Products> => {
                     // This will create a new function which will be accepting 'productTitle'
                     const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
 
-                    return _products.map(currentProduct => {
+                    return _products.flatMap(currentProduct => {
                         // get the title of the current product
                         const title = currentProduct.querySelector("div.item-title")?.textContent?.trim() ?? Unavailable.Title
                         // get the price of the current product
-                        const primaryPrice = currentProduct.querySelector("div.item-price")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
+                        const primaryPrice = currentProduct.querySelector("div.item-price")?.textContent?.trim() ?? Unavailable.PrimaryPrice
                         // get unit details (well, this is just description for this store)
-                        const units = currentProduct.querySelector("div.item-description-summary")?.textContent?.replace(/\n/g, " ").trim() ?? Unavailable.Units
+                        const units = currentProduct.querySelector("div.item-description-summary")?.textContent?.replace(/\s+/g, " ").trim() ?? Unavailable.Units
 
                         // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                         let category: ProductCategories = getProductCategory(title)
@@ -168,6 +168,8 @@ const getData = async (): Promise<Products> => {
                             // give it a default category
                             category = ProductCategories.PantryAndEssentials
                         }
+                        // - if title ends with '...' (meaning the title is too long), then skip adding this product
+                        if (title.endsWith("...")) return []
                         // get a new product
                         const product: Product = {
                             imageUri: "my image", 

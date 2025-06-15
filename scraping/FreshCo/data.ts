@@ -35,7 +35,8 @@ const getData = async (): Promise<Products> => {
     let numOfRetries = 0
     // will be representing a browser: 
     const browser = await puppeteer.launch({
-        headless: false
+        headless: false, 
+        slowMo: 10
     })
     // TODO: add a cron job logic
     // create a new page
@@ -91,6 +92,11 @@ const getData = async (): Promise<Products> => {
             // - these are the containers where all the product data is stored 
             // - should be roughly 13 containers
             const flyerSectionCount = await mainFrameContent.$$eval("div[sfml-content-wrap] sfml-flyer-image", divs => divs.length)
+            // This will create a new function which will be accepting 'productTitle'
+            const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
+            // will be storing last product values
+            let lastTitle: string = ""
+            let lastPrice: string = ""
             // starting from the third `sfml-flyer-image` (because the first two contain ad garbage, start selecting all the data we need)
             for (let i = 3; i < flyerSectionCount; i++) {
                 // just in case: wait for the `sfml-flyer-image`
@@ -110,47 +116,42 @@ const getData = async (): Promise<Products> => {
                     if (!isOnSale) continue
                     // otherwise, press on it
                     await currentProduct.click()
-                    // wait until the product info will appear on the right
-                    await asideFrameContent.waitForSelector("div.primary-info-content")
                     // wait for a bit because it otherwise is not going to find the element
-                    await new Promise(resolve => setTimeout(resolve, 300))
+                    // await new Promise(resolve => setTimeout(resolve, 300))
                     // select the content for a single product from the article
-                    const product = await asideFrameContent.$eval("div.primary-info-content", (infoContent, getProductCategory__funcBody) => {
-                        // pass a param productTitle, and a function body.
-                        // This will create a new function which will be accepting 'productTitle'
-                        const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
-                        // get the title 
-                        const title = infoContent.querySelector("h2.primary-info-header")?.textContent?.trim() ?? Unavailable.Title
-                        // get the price
-                        const primaryPrice = infoContent.querySelector("span.price-value")?.textContent?.trim() ?? Unavailable.PrimaryPrice
-                        // get units match 
-                        // NOTE: 
-                        // \d+ - any number of digits
-                        // (\s+)? - any number of whitespaces (if any)
-                        // (g|ea|ml|l|gm|pk) - one of these values. 
+                    await asideFrameContent.waitForSelector("h2.primary-info-header")
+                    // get the title 
+                    const title = (await asideFrameContent.$eval("h2.primary-info-header", header => header.textContent))?.trim() ?? Unavailable.Title
+                    lastTitle = title
+                    // get the price
+                    await asideFrameContent.waitForSelector("span.price-value")
+                    const primaryPrice = (await asideFrameContent.$eval("span.price-value", price => price.textContent))?.replace(/\$/gi, "").trim() ?? Unavailable.PrimaryPrice
+                    lastPrice = primaryPrice
+                    // get units match 
+                    // NOTE: 
+                    // \d+ - any number of digits
+                    // (\s+)? - any number of whitespaces (if any)
+                    // (g|ea|ml|l|gm|pk) - one of these values. 
 
-                        // - result: 
-                        // `44ml` - pass
-                        // `44           g` - pass (any number of whitespaces)
-                        // `44 hello g` - fail (only whitespaces between number and unit are allowed)
-                        const unitsMatch = title.match(/\d+(\s+)?(g|ea|ml|l|gm|pk)/i)
-                        // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
-                        const category: ProductCategories = getProductCategory(title)
-                        // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
-                        // by returning [] (this will be flattened -> as if a product never added)
-                        if (category === ProductCategories.NoCategory) return
-                        // get a new product
-                        const product: Product = {
-                            imageUri: "my image", 
-                            title, 
-                            primaryPrice, 
-                            // units will be empty (fuck it)
-                            units: unitsMatch ? unitsMatch[0] : Unavailable.Units, 
-                            category, 
-                        }
-                        // return product
-                        return product
-                    }, getProductCategory__funcBody)
+                    // - result: 
+                    // `44ml` - pass
+                    // `44           g` - pass (any number of whitespaces)
+                    // `44 hello g` - fail (only whitespaces between number and unit are allowed)
+                    const unitsMatch = title.match(/\d+(\s+)?(g|ea|ml|l|gm|pk)/ig)
+                    // get the units
+                    const units = unitsMatch ? unitsMatch.join(" / ") : Unavailable.Units
+                    // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
+                    const category: ProductCategories = getProductCategory(title)
+                    if (category === ProductCategories.NoCategory) continue
+                    // get a new product
+                    const product: Product = {
+                        imageUri: "my image", 
+                        title, 
+                        primaryPrice, 
+                        // units will be empty (fuck it)
+                        units, 
+                        category, 
+                    }
                     
                     // if there is a valid product then push it to the array
                     product && products.push(product)

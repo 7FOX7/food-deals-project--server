@@ -88,24 +88,28 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
+                    // get the title
                     const title = div.querySelector("div.head__title")?.textContent?.trim() ?? Unavailable.Title
-                    // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("span.price-update")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
-                    const secondaryPrice = div.querySelector("div.pricing__secondary-price span")?.textContent ?? ""
-                    // merge units with secondary price into a single string
-                    const units = div.querySelector("span.head__unit-details")?.textContent?.concat(`, ${secondaryPrice}`) ?? Unavailable.Units
-                    
+                    // get the FULL price info
+                    const primaryPrice = div.querySelector("div.pricing__sale-price")?.textContent?.replace(/\s+/g, " ").trim() ?? Unavailable.PrimaryPrice
+                    // get the secondary price
+                    const secondaryPrice = div.querySelector("div.pricing__secondary-price span")?.textContent?.trim()
+                    // get the units
+                    const units = div.querySelector("span.head__unit-details")?.textContent?.trim()
+                    // if there is `units` data, then concat it with the secondary price, otherwise, have just the secondary price
+                    const mergedData = units ? units.concat(`, ${secondaryPrice}`) : secondaryPrice
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
-                    // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if title ends with '...' (meaning the title is too long), then skip adding this product
                     // by returning [] (this will be flattened -> as if a product never added)
-                    if (category === ProductCategories.NoCategory) return []
+                    if (category === ProductCategories.NoCategory || title.endsWith("...")) return []
                     // get a new product
                     const product: Product = {
                         imageUri: "my image", 
                         title, 
                         primaryPrice, 
-                        units, 
+                        units: mergedData ?? Unavailable.Units, 
                         category, 
                     }
 

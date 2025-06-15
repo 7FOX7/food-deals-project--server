@@ -81,6 +81,8 @@ const getData = async (): Promise<Products> => {
                 // TODO: return the cached Product data (firestore)
                 throw new Error("check if a request is valid")
             }
+            // wait for the selector
+            await page.waitForSelector("#results-container", { visible: true })
             // get a new html content
             // NOTE: 
             // - We are doing this because by default there are duplicates on the first page. 
@@ -92,6 +94,8 @@ const getData = async (): Promise<Products> => {
             // NOTE: 
             // - all the elements will be selected within this content
             await page.setContent(htmlContent)
+            // wait for the selector
+            await page.waitForSelector("[data-item-id]", { visible: true })
             // - pass a serialized (string) function body as a param to the '$$eval' method. 
             // - DON'T pass regexes directly because they lose their functionality inside the browser (meaning we cannot call 'test' method on them). 
             // - DON'T create a function inside the '$$eval' method because there will be an error. Instead, pass function body as a string, and inside, convert it to a normal function by using 'Function' constructor (pass all the params need to the function accordingly)
@@ -109,14 +113,14 @@ const getData = async (): Promise<Products> => {
                     // get the products's price
                     // NOTE: 
                     // method `.replace(/(\$|now)/ig, "").trim()` - replaces all occurences of `$` and `now` with empty string
-                    const primaryPrice = div.querySelector("[data-automation-id=product-price]")?.firstElementChild?.textContent?.replace(/(\$|now)/ig, "").trim() ?? Unavailable.PrimaryPrice
+                    const primaryPrice = div.querySelector("[data-automation-id=product-price]")?.firstElementChild?.textContent?.replace(/now/gi, "").trim() ?? Unavailable.PrimaryPrice
                     // get the product's units
                     const units = div.querySelector("[data-automation-id=product-price]")?.lastElementChild?.textContent?.trim() ?? Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
                     // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
                     // by returning [] (this will be flattened -> as if a product never added)
-                    if (category === ProductCategories.NoCategory) return []
+                    if (category === ProductCategories.NoCategory || title.endsWith("...")) return []
                     // get a new product
                     const product: Product = {
                         imageUri: "my image", 

@@ -82,12 +82,13 @@ const getData = async (): Promise<Products> => {
     // will be representing a browser: 
     const browser = await puppeteer.launch({
         headless: false, 
-        slowMo: 10
+        slowMo: 15
     })
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
-    
+    // get the length of all products
+    console.log("all products length: " + foods.length)
     // recursive function we will be calling every time
     // to go to the next page (there are no products left in the current page)
     const addProducts = async (): Promise<Products> => {
@@ -141,7 +142,7 @@ const getData = async (): Promise<Products> => {
                     page.waitForSelector("div.grid__item div.grid-uniform")
                 ])
                 // decide if the container is empty
-                const isContainerEmpty = await page.$eval("div.grid__item div.grid-uniform", div => div.innerText.replace(/(")|( )/gi, "").length === 0)
+                const isContainerEmpty = await page.$eval("div.grid__item div.grid-uniform", div => div.innerText.replace(/("+)|\s+/gi, "").length === 0)
                 // if there is no a container, this means there is no product, just skip the current product
                 if (isContainerEmpty) continue
                 // wait for selector
@@ -152,11 +153,13 @@ const getData = async (): Promise<Products> => {
                 // get the title of the first product that match input
                 const title = await page.$eval("span.grid-product__title", div => div.textContent?.trim()) ?? Unavailable.Title
                 // get the title of the first product that match input
-                const primaryPrice = await page.$eval("span.grid-product__price", span => span.innerText?.replace(/(regular price)|(\$)|(\+)/gi, "").trim()) ?? Unavailable.PrimaryPrice
+                const primaryPrice = await page.$eval("span.grid-product__price", span => span.innerText?.replace(/(regular price)|(\n+)/gi, "").trim()) ?? Unavailable.PrimaryPrice
                 // units will be empty this time
-                const units = ""
+                const units = Unavailable.Units
                 // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                 let category: ProductCategories = getProductCategory(title)
+                // - if title ends with '...' (meaning the title is too long), then skip adding this product
+                if (title.endsWith("...")) continue
                 // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then give it a default category
                 if (category === ProductCategories.NoCategory) {
                     // give it a default category

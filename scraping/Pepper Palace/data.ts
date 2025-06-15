@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
-import { getProductCategory__funcBody } from "../../utils/product-categories-regex"
 import * as constants from "../../utils/constants"
 
 // default for unavailable product data
@@ -89,10 +88,10 @@ const getData = async (): Promise<Products> => {
                     if (!buttonText || /sold out/ig.test(buttonText)) return []
                     // get the title
                     const title = div.querySelector("h2.productitem--title")?.textContent?.trim() ?? Unavailable.Title
-                    // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("[data-price]")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
+                    // get the primary price
+                    const primaryPrice = div.querySelector("[data-price]")?.textContent?.trim() ?? Unavailable.PrimaryPrice
                     // there are no units for this product
-                    const units = ""
+                    const units = Unavailable.Units
                     // all the products are pantry essentials by default (sauces)
                     const category: ProductCategories = ProductCategories.PantryAndEssentials
                     // get a new product

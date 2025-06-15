@@ -101,17 +101,19 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
+                    // get the title
                     const title = div.querySelector("div.product-tile__content h2.product-tile__title")?.textContent?.trim() ?? Unavailable.Title
-                    // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("div.pricing span.price__value")?.textContent?.replaceAll("$", "").trim() ?? Unavailable.PrimaryPrice
-                    // replace all the brackets and `$` with empty string
-                    const units = div.querySelector("div.pricing div.price__unit")?.textContent?.replace(/(\$)|(\()|(\))/gi, "")?.trim() ?? Unavailable.Units
+                    // get the primary price
+                    const primaryPrice = div.querySelector("div.pricing span.price__value")?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                    // replace all the brackets with empty string
+                    const units = div.querySelector("div.pricing div.price__unit")?.textContent?.replace(/(\()|(\))/gi, "")?.trim() ?? Unavailable.Units
                     
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
-                    // if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if product category is 'NoCategory' (meaning this might be NOT a food or a food with a difficult name), then skip adding this product
+                    // - if title has more than 40 characters (meaning it will not contain the full title), then skip adding this product
                     // by returning [] (this will be flattened -> as if a product never added)
-                    if (category === ProductCategories.NoCategory) return []
+                    if (category === ProductCategories.NoCategory || title.endsWith("...")) return []
                     // get a new product
                     const product: Product = {
                         imageUri: "my image", 
