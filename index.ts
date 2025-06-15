@@ -44,13 +44,7 @@ category: ProductCategories.NoCategory
     "Zest Mart": () => [],      // no data for this store  
     "FreshCo": () => import("./scraping/FreshCo/data").then(mod => mod.default()), 
     "Food Basics": () => import("./scraping/Food Basics/data").then(mod => mod.default()), 
-    "Metro Lakeshore": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Metro Lakeshore": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "La Paisana Latin Groceries": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -309,13 +303,7 @@ category: ProductCategories.NoCategory
 category: ProductCategories.NoCategory
     }],  
     "Jim's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
-    "Metro": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Metro": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Chippawa Foodland": () => [{
         imageUri: "hello from product data (server)", 

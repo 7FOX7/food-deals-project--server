@@ -45,7 +45,7 @@ export type ProductData = {
     "FreshCo": () => Promise<Products>, 
     // TODO: implement
     "Food Basics": () => Promise<Products>,  
-    "Metro Lakeshore": () => Products,  
+    "Metro Lakeshore": () =>Promise<Products>,   
     "La Paisana Latin Groceries": () => Products,  
     "Al Noor": () => Products,  
     "Sobeys": () => Products,  
@@ -86,7 +86,7 @@ export type ProductData = {
     "Vineland Foodland - Supermarket": () => Products,  
     "Pistachio's": () => Products,  
     "Jim's No Frills": () => Promise<Products>,  
-    "Metro": () => Products,  
+    "Metro": () => Promise<Products>,  
     "Mark's No Frills": () => Promise<Products>,  
     "Chippawa Foodland": () => Products,  
     "Wholesale Club": () => Products,  
