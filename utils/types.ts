@@ -45,8 +45,8 @@ export type ProductData = {
     "FreshCo": () => Promise<Products>, 
     // TODO: implement
     "Food Basics": () => Promise<Products>,  
-    "Metro Lakeshore": () =>Promise<Products>,   
-    "La Paisana Latin Groceries": () => Products,  
+    "Metro Lakeshore": () => Promise<Products>,   
+    "La Paisana Latin Groceries": () => Promise<Products>,   
     "Al Noor": () => Products,  
     "Sobeys": () => Products,  
     "B & R European Deli": () => Products,  

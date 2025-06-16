@@ -45,13 +45,7 @@ category: ProductCategories.NoCategory
     "FreshCo": () => import("./scraping/FreshCo/data").then(mod => mod.default()), 
     "Food Basics": () => import("./scraping/Food Basics/data").then(mod => mod.default()), 
     "Metro Lakeshore": () => import("./scraping/Metro/data").then(mod => mod.default()),
-    "La Paisana Latin Groceries": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "La Paisana Latin Groceries": () => import("./scraping/La Paisana/data").then(mod => mod.default()),
     "Al Noor": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -375,12 +369,12 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["FreshCo"]()
+        const products = await productData["La Paisana Latin Groceries"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
     catch (err: any) {
-        console.error("failed to update products: " + err.me)
+        console.error("failed to update products: " + err.message)
     }   
 }
 
