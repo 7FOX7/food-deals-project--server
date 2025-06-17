@@ -53,7 +53,7 @@ const getData = async (): Promise<Products> => {
 
         try {
             // connect to the specified url (watch page number)
-            const response = await page.goto(`https://www.zehrs.ca/en/food/c/27985?page=${pageNum}&promotions=Price+Reduction`, {
+            const response = await page.goto(`https://www.zehrs.ca/en/food/c/27985?page=${pageNum}&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reductio`, {
                 waitUntil: "networkidle2"
             })
             // if connection to the page failed (and it is not our API's fault, then send a new request after delay time)
@@ -88,9 +88,20 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
+                    // get the title
                     const title = div.querySelector("h3.css-6qrhwc")?.textContent?.trim() ?? Unavailable.Title
-                    // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                    // will be storing the primary price
+                    let primaryPrice: string = ""
+                    // get the secondary price (will only be present if the product is multi-buy)
+                    const multiBuyPrice = div.querySelector("span.css-1wji473")?.textContent?.trim()
+                    // if the product is multi-buy, then handle two prices
+                    if (multiBuyPrice) {
+                        primaryPrice = `${div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim()} OR ${multiBuyPrice} ea`
+                    } else {
+                        // get a single price
+                        primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                    }
+                    // get the units
                     const units = div.querySelector("p.css-1yftjin")?.textContent?.trim() ?? Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
