@@ -161,7 +161,7 @@ const getData = async (): Promise<Products> => {
                     // `1 grade 44 g` - only `44 g` will pass (because there is a word boundary)
                     // `44-256 ML` - pass (`-` is allowed between the digits)
                     // `17.24 kg` - pass (`.` is allowed between the digits)
-                    const unitsMatch = description.match(/\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/)?(kg|g|ea|ml|l|gm|pk)\b/ig)
+                    const unitsMatch = description.match(/\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/)?(kg|g|ea|ml|l|gm|pk|cnt|packs?)\b/ig)
                     // get the units
                     const units = unitsMatch ? unitsMatch.join(" or ") : Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
