@@ -125,18 +125,23 @@ const getData = async (): Promise<Products> => {
                     const primaryPrice = (await asideFrameContent.$eval("span.price-value", price => price.textContent))?.trim() ?? Unavailable.PrimaryPrice
                     // get units match 
                     // NOTE: 
-                    // \d+ - any number of digits
-                    // \.?(\d+) - optional dot (decimal) and a decimal
+                    // \b ... \b - word boundary (the whole word should match the pattern)
+                    // (\d+(\s+)?(\.|\-)(\s+)?)? - optional number that comes BEFORE the decimal point, or `-`
+                    // (\d+) - any number of digits (this might be either a single number), or the second number after decimal `.` or range `-`
                     // (\s+)? - any number of whitespaces (if any)
-                    // (kg|g|ea|ml|l|gm|pk) - one of these values. 
+                    // (\/)? - optional `/` that will match: 44/kg
+                    // (kg|g|ea|ml|l|gm|pk) - the pattern should match one of those words
 
                     // - result: 
                     // `44ml` - pass
                     // `44           g` - pass (any number of whitespaces)
                     // `44 hello g` - fail (only whitespaces between number and unit are allowed)
-                    const unitsMatch = title.match(/\d+\.?(\d+)?(\s+)?(kg|g|ea|ml|l|gm|pk)/ig)
+                    // `1 grade 44 g` - only `44 g` will pass (because there is a word boundary)
+                    // `44-256 ML` - pass (`-` is allowed between the digits)
+                    // `17.24 kg` - pass (`.` is allowed between the digits)
+                    const unitsMatch = title.match(/\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/)?(kg|g|ea|ml|l|gm|pk)\b/ig)
                     // get the units
-                    const units = unitsMatch ? unitsMatch.join(" / ") : Unavailable.Units
+                    const units = unitsMatch ? unitsMatch.join(" or ") : Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
                     if (category === ProductCategories.NoCategory) continue
