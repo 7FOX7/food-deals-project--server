@@ -50,13 +50,7 @@ category: ProductCategories.NoCategory
     "Sobeys": () => import("./scraping/Sobeys/data").then(mod => mod.default()),
     "B & R European Deli": () => [],    // no data for this store
     "Roman Cheese": () => import("./scraping/Roman Cheese/data").then(mod => mod.default()),
-    "Dinh Dinh Asian Foods": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Dinh Dinh Asian Foods": () => [],          // no data for this store
     "Independent Grocery Store - Hendriks": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
