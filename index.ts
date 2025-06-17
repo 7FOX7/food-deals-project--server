@@ -52,13 +52,7 @@ category: ProductCategories.NoCategory
     "Roman Cheese": () => import("./scraping/Roman Cheese/data").then(mod => mod.default()),
     "Dinh Dinh Asian Foods": () => [],          // no data for this store
     "Independent Grocery Store - Hendriks": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
-    "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store": () => [],    // no data for this store
     "Commisso's Fresh Food": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
