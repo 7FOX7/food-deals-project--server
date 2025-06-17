@@ -49,13 +49,7 @@ category: ProductCategories.NoCategory
     "Al Noor": () => [],      // no data for this store
     "Sobeys": () => import("./scraping/Sobeys/data").then(mod => mod.default()),
     "B & R European Deli": () => [],    // no data for this store
-    "Roman Cheese": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Roman Cheese": () => import("./scraping/Roman Cheese/data").then(mod => mod.default()),
     "Dinh Dinh Asian Foods": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -351,7 +345,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Sobeys"]()
+        const products = await productData["Roman Cheese"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
