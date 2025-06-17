@@ -46,20 +46,8 @@ category: ProductCategories.NoCategory
     "Food Basics": () => import("./scraping/Food Basics/data").then(mod => mod.default()), 
     "Metro Lakeshore": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "La Paisana Latin Groceries": () => import("./scraping/La Paisana/data").then(mod => mod.default()),
-    "Al Noor": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
-    "Sobeys": () => [{
-        imageUri: "Sobeys", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Al Noor": () => [],      // no data for this store
+    "Sobeys": () => import("./scraping/Sobeys/data").then(mod => mod.default()),
     "B & R European Deli": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -369,7 +357,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["La Paisana Latin Groceries"]()
+        const products = await productData["Sobeys"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
