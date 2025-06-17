@@ -36,7 +36,6 @@ const getData = async (): Promise<Products> => {
     // will be representing a browser: 
     const browser = await puppeteer.launch({
         headless: false, 
-        slowMo: 10
     })
     // TODO: add a cron job logic
     // create a new page
@@ -94,13 +93,10 @@ const getData = async (): Promise<Products> => {
             const flyerSectionCount = await mainFrameContent.$$eval("div[sfml-content-wrap] sfml-flyer-image", divs => divs.length)
             // This will create a new function which will be accepting 'productTitle'
             const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
-            // will be storing last product values
-            let lastTitle: string = ""
-            let lastPrice: string = ""
             // starting from the third `sfml-flyer-image` (because the first two contain ad garbage, start selecting all the data we need)
             for (let i = 3; i < flyerSectionCount; i++) {
                 // just in case: wait for the `sfml-flyer-image`
-                await mainFrameContent.waitForSelector(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"]`)   
+                await mainFrameContent.waitForSelector(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"]`, { visible: true })   
                 // get current products
                 const currentProducts = await mainFrameContent.$$(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"] div button`)
                 // iterate through each filtered product and get the data we need
@@ -114,30 +110,31 @@ const getData = async (): Promise<Products> => {
                     const isOnSale = /SAVE/gi.test(ariaLabel)
                     // if it is not, just skip it
                     if (!isOnSale) continue
-                    // otherwise, press on it
-                    await currentProduct.click()
-                    // wait for a bit because it otherwise is not going to find the element
-                    // await new Promise(resolve => setTimeout(resolve, 300))
-                    // select the content for a single product from the article
-                    await asideFrameContent.waitForSelector("h2.primary-info-header")
+                    // click on the button
+                    // NOTE: 
+                    // - DON'T use `currentProduct.click()` as it will make duplicate products
+                    await currentProduct.evaluate(el => el.click())
+                    // wait for a bit, so the content has enough time to appear on the page
+                    await new Promise(resolve => setTimeout(resolve, 400))
+                    await asideFrameContent.waitForSelector("h2.primary-info-header", { visible: true })
                     // get the title 
                     const title = (await asideFrameContent.$eval("h2.primary-info-header", header => header.textContent))?.trim() ?? Unavailable.Title
-                    lastTitle = title
+                    // wait for the selector
+                    await asideFrameContent.waitForSelector("span.price-value", { visible: true })
                     // get the price
-                    await asideFrameContent.waitForSelector("span.price-value")
-                    const primaryPrice = (await asideFrameContent.$eval("span.price-value", price => price.textContent))?.replace(/\$/gi, "").trim() ?? Unavailable.PrimaryPrice
-                    lastPrice = primaryPrice
+                    const primaryPrice = (await asideFrameContent.$eval("span.price-value", price => price.textContent))?.trim() ?? Unavailable.PrimaryPrice
                     // get units match 
                     // NOTE: 
                     // \d+ - any number of digits
+                    // \.?(\d+) - optional dot (decimal) and a decimal
                     // (\s+)? - any number of whitespaces (if any)
-                    // (g|ea|ml|l|gm|pk) - one of these values. 
+                    // (kg|g|ea|ml|l|gm|pk) - one of these values. 
 
                     // - result: 
                     // `44ml` - pass
                     // `44           g` - pass (any number of whitespaces)
                     // `44 hello g` - fail (only whitespaces between number and unit are allowed)
-                    const unitsMatch = title.match(/\d+(\s+)?(g|ea|ml|l|gm|pk)/ig)
+                    const unitsMatch = title.match(/\d+\.?(\d+)?(\s+)?(kg|g|ea|ml|l|gm|pk)/ig)
                     // get the units
                     const units = unitsMatch ? unitsMatch.join(" / ") : Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
