@@ -48,13 +48,7 @@ category: ProductCategories.NoCategory
     "La Paisana Latin Groceries": () => import("./scraping/La Paisana/data").then(mod => mod.default()),
     "Al Noor": () => [],      // no data for this store
     "Sobeys": () => import("./scraping/Sobeys/data").then(mod => mod.default()),
-    "B & R European Deli": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "B & R European Deli": () => [],    // no data for this store
     "Roman Cheese": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
