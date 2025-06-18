@@ -56,13 +56,7 @@ category: ProductCategories.NoCategory
     "Commisso's Fresh Food": () => import("./scraping/Commisso's Fresh Food/data").then(mod => mod.default()),
     "Farm Boy": () => import("./scraping/Farm Boy/data").then(mod => mod.default()),
     "Thai Binh Asian Food": () => [],       // no data for this store 
-    "The Red Barn Farm Market and Bakery": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "The Red Barn Farm Market and Bakery": () => [],  
     "Independent Grocery store - Phil's": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
