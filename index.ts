@@ -60,13 +60,7 @@ category: ProductCategories.NoCategory
     "Independent Grocery store - Phil's": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "Charlie Asian Grocery Inc.": () => [],  // no data for this store 
     "Patty's Delights Peruvian Culinary": () => [],         // no data for this store  
-    "Gallagher's": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Gallagher's": () => import("./scraping/Gallagher's/data").then(mod => mod.default()),
     "Raja Grocers": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -285,7 +279,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Independent Grocery store - Phil's"]()
+        const products = await productData["Gallagher's"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
