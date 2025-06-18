@@ -43,7 +43,6 @@ export type ProductData = {
     "Giant Tiger": () => Promise<Products>,  
     "Zest Mart": () => Products,                // no data for this store
     "FreshCo": () => Promise<Products>, 
-    // TODO: implement
     "Food Basics": () => Promise<Products>,  
     "Metro Lakeshore": () => Promise<Products>,   
     "La Paisana Latin Groceries": () => Promise<Products>,   
@@ -58,7 +57,7 @@ export type ProductData = {
     "Farm Boy": () => Promise<Products>,    
     "Thai Binh Asian Food": () => Products,     // no data for this store       
     "The Red Barn Farm Market and Bakery": () => Products,      // no data for this store  
-    "Independent Grocery store - Phil's": () => Products,  
+    "Independent Grocery store - Phil's": () => Promise<Products>,  
     "Charlie Asian Grocery Inc.": () => Products,  
     "Patty's Delights Peruvian Culinary": () => Products,  
     "Gallagher's": () => Products,  

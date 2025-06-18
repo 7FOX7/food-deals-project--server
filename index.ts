@@ -57,13 +57,7 @@ category: ProductCategories.NoCategory
     "Farm Boy": () => import("./scraping/Farm Boy/data").then(mod => mod.default()),
     "Thai Binh Asian Food": () => [],       // no data for this store 
     "The Red Barn Farm Market and Bakery": () => [],  
-    "Independent Grocery store - Phil's": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Independent Grocery store - Phil's": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "Charlie Asian Grocery Inc.": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -303,7 +297,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Farm Boy"]()
+        const products = await productData["Independent Grocery store - Phil's"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
