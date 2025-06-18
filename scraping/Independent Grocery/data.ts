@@ -1,3 +1,9 @@
+/*
+    NOTE: 
+    - For the sake of simplicity: 
+    - `data` is shared between all stores that start with `Independent Grocery` (they contain ALMOST the same products anyway (the order might be different but filters and url are the same))
+*/
+
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
 import { getProductCategory__funcBody } from "../../utils/product-categories-regex"
