@@ -15,7 +15,7 @@ const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|m
 const frozenProductsRegex = /\b(frozen|prepared|ready)\b/i
 
 // "Bakery & Breakfast" regex
-const bakeryProductsRegex = /\b(breads?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oatmeal|porridge|breakfast|jam|jelly|honey|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia)\b/i
+const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oatmeal|porridge|breakfast|jam|jelly|honey|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia)\b/i
 
 // "Snacks & Sweets" regex
 const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gummy bears|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?)\b/i
