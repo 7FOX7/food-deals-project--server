@@ -54,13 +54,7 @@ category: ProductCategories.NoCategory
     "Independent Grocery Store - Hendriks": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store": () => [],    // no data for this store
     "Commisso's Fresh Food": () => import("./scraping/Commisso's Fresh Food/data").then(mod => mod.default()),
-    "Farm Boy": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Farm Boy": () => import("./scraping/Farm Boy/data").then(mod => mod.default()),
     "Thai Binh Asian Food": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -321,7 +315,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Commisso's Fresh Food"]()
+        const products = await productData["Farm Boy"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
