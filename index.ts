@@ -58,13 +58,7 @@ category: ProductCategories.NoCategory
     "Thai Binh Asian Food": () => [],       // no data for this store 
     "The Red Barn Farm Market and Bakery": () => [],  
     "Independent Grocery store - Phil's": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
-    "Charlie Asian Grocery Inc.": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Charlie Asian Grocery Inc.": () => [],  // no data for this store 
     "Patty's Delights Peruvian Culinary": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
