@@ -9,19 +9,19 @@ const freshProduceRegex = /\b(apples?|bananas?|oranges?|grapes?|cherr(y|ies)|pea
 const meatProductsRegex = /\b(meat|beef|pork|chicken|turkey|lamb|goat|duck|venison|rabbit|bacon|ham|sausage|salami|prosciutto|chorizo|meatballs|steak|filet mignon|brisket|ribs|cutlets|tenderloin|crown roast|spareribs|taco meat|bologna|drumsticks|thighs|fish|salmon|tuna|trout|cod|haddock|halibut|sardines|mackerel|tilapia|catfish|shrimp|prawns|lobster|crab|scallops|clams|oysters|mussels|squid|octopus|crawfish|langoustine|fish roe|caviar|sushi|ceviche|tartar|tuna steak|fish fillet|seafood|shellfish|whitefish|carp|bass|snapper|flounder|perch|barramundi|swordfish|mahi-mahi|rockfish|monkfish|grouper|anchovies|kelp)\b/i
 
 // "Dairy & Eggs" regex
-const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|mozzarella|parmesan|cheddar|gouda|brie|feta|provolone|mascarpone|kefir|gelato|eggs?|omelette|quiche|frittata|custard|soufflé|cheesecake|dairy|butter)\b/i
+const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|mozzarella|parmesan|cheddar|gouda|brie|feta|provolone|mascarpone|kefir|gelato|eggs?|omelette|quiche|frittata|custard|soufflé|cheesecake|dairy|butter|falooda)\b/i
 
 // "Frozen & Prepared Foods" regex
 const frozenProductsRegex = /\b(frozen|prepared|ready)\b/i
 
 // "Bakery & Breakfast" regex
-const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oatmeal|porridge|breakfast|jam|jelly|honey|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia)\b/i
+const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oatmeal|porridge|breakfast|jam|jelly|honey|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar)\b/i
 
 // "Snacks & Sweets" regex
-const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gummy bears|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?)\b/i
+const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gummy bears|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun)\b/i
 
 // "Pantry & Essentials" regex
-const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad dressing|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|oats|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds|coffee|tea|spices)\b/i
+const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad dressing|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|oats|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds|coffee|tea|spices|pani puri|papri chaat|bhel puri)\b/i
 
 // will be storing function body (we will be using it when creating a function with 'Function' constructor)
 // NOTE: we wrap "${ProductCategories.FrozenAndPrepared}" in quotes so the value returned is a string
@@ -37,3 +37,23 @@ export const getProductCategory__funcBody = `
     // will be returned if none of the categories match
     else return "${ProductCategories.NoCategory}"
 `
+
+// we will be matching product details against this regex to get the units info
+// get units match 
+
+// NOTE: 
+// \b ... \b - word boundary (the whole word should match the pattern)
+// (\d+(\s+)?(\.|\-)(\s+)?)? - optional number that comes BEFORE the decimal point, or `-`
+// (\d+) - any number of digits (this might be either a single number), or the second number after decimal `.` or range `-`
+// (\s+)? - any number of whitespaces (if any)
+// (\/(\s+)?)? - optional `/` with a space (if any) after it that will match: 44/kg and 44/  kg 
+// (kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece) - the pattern should match one of those words
+
+// - result: 
+// `44ml` - pass
+// `44           g` - pass (any number of whitespaces)
+// `44 hello g` - fail (only whitespaces between number and unit are allowed)
+// `1 grade 44 g` - only `44 g` will pass (because there is a word boundary)
+// `44-256 ML` - pass (`-` is allowed between the digits)
+// `17.24 kg` - pass (`.` is allowed between the digits)
+export const unitsRegex = /\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/(\s+)?)?(kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece)\b/ig

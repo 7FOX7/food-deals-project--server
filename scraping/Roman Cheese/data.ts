@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
-import { getProductCategory__funcBody } from "../../utils/product-categories-regex"
+import { getProductCategory__funcBody } from "../../utils/regexes"
 import * as constants from "../../utils/constants"
 
 // default for unavailable product data
