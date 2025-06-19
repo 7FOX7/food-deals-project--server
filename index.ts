@@ -66,13 +66,7 @@ category: ProductCategories.NoCategory
     "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "The Indian Valley": () => [],          // no data for this store  
     "Real Canadian Superstore": () => import("./scraping/Superstore/data").then(mod => mod.default()),
-    "Bodner's Market": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Bodner's Market": () => [],  
     "Food Basket": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
