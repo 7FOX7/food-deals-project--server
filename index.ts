@@ -63,13 +63,7 @@ category: ProductCategories.NoCategory
     "Gallagher's": () => import("./scraping/Gallagher's/data").then(mod => mod.default()),
     "Raja Grocers": () => import("./scraping/Raja Grocers/data").then(mod => mod.default()),
     "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
-    "Joe's Your Independent Grocer": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "The Indian Valley": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -267,7 +261,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Peanut Mill"]()
+        const products = await productData["Joe's Your Independent Grocer"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
