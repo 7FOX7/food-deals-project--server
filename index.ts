@@ -62,13 +62,7 @@ category: ProductCategories.NoCategory
     "Patty's Delights Peruvian Culinary": () => [],         // no data for this store  
     "Gallagher's": () => import("./scraping/Gallagher's/data").then(mod => mod.default()),
     "Raja Grocers": () => import("./scraping/Raja Grocers/data").then(mod => mod.default()),
-    "Peanut Mill": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
     "Joe's Your Independent Grocer": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -273,7 +267,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Raja Grocers"]()
+        const products = await productData["Peanut Mill"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
