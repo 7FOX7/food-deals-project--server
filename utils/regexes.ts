@@ -6,7 +6,7 @@ import { ProductCategories } from "./types"
 const freshProduceRegex = /\b(apples?|bananas?|oranges?|grapes?|cherr(y|ies)|peach(es)?|plums?|pears?|kiwis?|pineapples?|mangos?|melons?|cantaloupes?|lemons?|limes?|avocados?|tomato(s|es)?|cucumbers?|peppers?|carrots?|broccoli|cauliflower|spinach|kale|lettuce|arugula|beets?|radish(es)?|beans?|peas?|zucchini|eggplants?|potatoes?|onions?|garlic|corn|asparagus|brussels sprouts?|artichokes?|celery|mushrooms?|cabbage|bok choy|turnips?|parsnips?|chives?|dill|basil|cilantro|parsley|thyme|mint|tarragon|jicama|plantains?|lychee|persimmon|kumquat|guava|figs?|dates?|pomegranates?|carambola|buddha's hand|calamondin|yuzu|kohlrabi|celeriac|endive|edamame|chayote|lotus root|fiddleheads?|black truffles?|berr(y|ies)|vegetables?|greens|culinary herbs|sprouts)\b/i
 
 // "Meat & Seafood" regex
-const meatProductsRegex = /\b(meat|beef|pork|chicken|turkey|lamb|goat|duck|venison|rabbit|bacon|ham|sausage|salami|prosciutto|chorizo|meatballs|steak|filet mignon|brisket|ribs|cutlets|tenderloin|crown roast|spareribs|taco meat|bologna|drumsticks|thighs|fish|salmon|tuna|trout|cod|haddock|halibut|sardines|mackerel|tilapia|catfish|shrimp|prawns|lobster|crab|scallops|clams|oysters|mussels|squid|octopus|crawfish|langoustine|fish roe|caviar|sushi|ceviche|tartar|tuna steak|fish fillet|seafood|shellfish|whitefish|carp|bass|snapper|flounder|perch|barramundi|swordfish|mahi-mahi|rockfish|monkfish|grouper|anchovies|kelp)\b/i
+const meatProductsRegex = /\b(meat|beef|pork|chicken|turkey|lamb|goat|duck|venison|rabbit|bacon|ham|sausage|salami|prosciutto|chorizo|meatballs|steak|filet mignon|brisket|ribs|cutlets|tenderloin|crown roast|spareribs|taco meat|bologna|drumsticks|thighs|fish|salmon|tuna|trout|cod|haddock|halibut|sardines|mackerel|tilapia|catfish|shrimp|prawns|lobster|crab|scallops|clams|oysters|mussels|squid|octopus|crawfish|langoustine|fish roe|caviar|sushi|ceviche|tartar|fish fillet|seafood|shellfish|whitefish|carp|bass|snapper|flounder|perch|barramundi|swordfish|mahi-mahi|rockfish|monkfish|grouper|anchovies|kelp)\b/i
 
 // "Dairy & Eggs" regex
 const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|mozzarella|parmesan|cheddar|gouda|brie|feta|provolone|mascarpone|kefir|gelato|eggs?|omelette|quiche|frittata|custard|soufflé|cheesecake|dairy|butter|falooda)\b/i
@@ -15,13 +15,13 @@ const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|m
 const frozenProductsRegex = /\b(frozen|prepared|ready)\b/i
 
 // "Bakery & Breakfast" regex
-const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar)\b/i
+const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub)\b/i
 
 // "Snacks & Sweets" regex
 const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun)\b/i
 
 // "Pantry & Essentials" regex
-const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad dressing|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj)\b/i
+const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj)\b/i
 
 // will be storing function body (we will be using it when creating a function with 'Function' constructor)
 // NOTE: we wrap "${ProductCategories.FrozenAndPrepared}" in quotes so the value returned is a string
@@ -47,7 +47,7 @@ export const getProductCategory__funcBody = `
 // (\d+) - any number of digits (this might be either a single number), or the second number after decimal `.` or range `-`
 // (\s+)? - any number of whitespaces (if any)
 // (\/(\s+)?)? - optional `/` with a space (if any) after it that will match: 44/kg and 44/  kg 
-// (kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece) - the pattern should match one of those words
+// (kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece|oz) - the pattern should match one of those words
 
 // - result: 
 // `44ml` - pass
@@ -56,4 +56,4 @@ export const getProductCategory__funcBody = `
 // `1 grade 44 g` - only `44 g` will pass (because there is a word boundary)
 // `44-256 ML` - pass (`-` is allowed between the digits)
 // `17.24 kg` - pass (`.` is allowed between the digits)
-export const unitsRegex = /\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/(\s+)?)?(kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece)\b/ig
+export const unitsRegex = /\b(\d+(\s+)?(\.|\-|x)(\s+)?)?(\d+)(\s+)?(\/(\s+)?)?(kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece|oz)\b/ig
