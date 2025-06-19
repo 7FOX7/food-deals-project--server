@@ -66,15 +66,9 @@ category: ProductCategories.NoCategory
     "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "The Indian Valley": () => [],          // no data for this store  
     "Real Canadian Superstore": () => import("./scraping/Superstore/data").then(mod => mod.default()),
-    "Bodner's Market": () => [],  
+    "Bodner's Market": () => [],            // no data for this store 
     "Food Basket": () => import("./scraping/Food Basket/data").then(mod => mod.default()),
-    "The Healthy Cupboard": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "The Healthy Cupboard": () => [],       // no data for this store  
     "Costco Wholesale": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
