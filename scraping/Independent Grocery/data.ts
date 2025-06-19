@@ -59,7 +59,7 @@ const getData = async (): Promise<Products> => {
 
         try {
             // connect to the specified url (watch page number)
-            const response = await page.goto(`https://www.yourindependentgrocer.ca/en/food/c/27985?page=${pageNum}&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reductio`, {
+            const response = await page.goto(`https://www.yourindependentgrocer.ca/en/food/c/27985?page=${pageNum}&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reduction&promotions=Multi-Buy&promotions=Price+Reduction`, {
                 waitUntil: "networkidle2"
             })
             // if connection to the page failed (and it is not our API's fault, then send a new request after delay time)
