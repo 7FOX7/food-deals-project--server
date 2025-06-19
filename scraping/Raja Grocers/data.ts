@@ -1,9 +1,3 @@
-/*
-    NOTE: 
-    - For the sake of simplicity: 
-    - `data` is shared between all stores that start with `Walmart` (they contain the same products anyway)
-*/
-
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
 import { getProductCategory__funcBody, unitsRegex } from "../../utils/regexes"
