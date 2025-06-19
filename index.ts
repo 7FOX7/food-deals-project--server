@@ -64,13 +64,7 @@ category: ProductCategories.NoCategory
     "Raja Grocers": () => import("./scraping/Raja Grocers/data").then(mod => mod.default()),
     "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
     "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
-    "The Indian Valley": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "The Indian Valley": () => [],          // no data for this store  
     "Real Canadian Superstore": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
