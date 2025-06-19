@@ -67,13 +67,7 @@ category: ProductCategories.NoCategory
     "The Indian Valley": () => [],          // no data for this store  
     "Real Canadian Superstore": () => import("./scraping/Superstore/data").then(mod => mod.default()),
     "Bodner's Market": () => [],  
-    "Food Basket": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Food Basket": () => import("./scraping/Food Basket/data").then(mod => mod.default()),
     "The Healthy Cupboard": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -243,7 +237,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Real Canadian Superstore"]()
+        const products = await productData["Food Basket"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
