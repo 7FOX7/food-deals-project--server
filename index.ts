@@ -65,13 +65,7 @@ category: ProductCategories.NoCategory
     "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
     "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "The Indian Valley": () => [],          // no data for this store  
-    "Real Canadian Superstore": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Real Canadian Superstore": () => import("./scraping/Superstore/data").then(mod => mod.default()),
     "Bodner's Market": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -255,7 +249,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Joe's Your Independent Grocer"]()
+        const products = await productData["Real Canadian Superstore"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
