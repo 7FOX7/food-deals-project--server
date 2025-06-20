@@ -83,13 +83,7 @@ category: ProductCategories.NoCategory
     "Lococo's": () => import("./scraping/Lococo's/data").then(mod => mod.default()),
     "Zehrs": () => import("./scraping/Zehrs/data").then(mod => mod.default()), 
     "Walmart Supercentre": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
-    "Avondale": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Avondale": () => [],           // no data for this store 
     "Vineland Foodland - Supermarket": () => import("./scraping/Foodland/data").then(mod => mod.default()),
     "Pistachio's": () => [{
         imageUri: "hello from product data (server)", 
