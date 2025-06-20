@@ -85,13 +85,7 @@ category: ProductCategories.NoCategory
     "Walmart Supercentre": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
     "Avondale": () => [],           // no data for this store 
     "Vineland Foodland - Supermarket": () => import("./scraping/Foodland/data").then(mod => mod.default()),
-    "Pistachio's": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Pistachio's": () => [],         // this store doesn't sell any food  
     "Jim's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Metro": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
