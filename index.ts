@@ -80,13 +80,7 @@ category: ProductCategories.NoCategory
     // NOTE: 
     // - `data` is shared between all stores that contain the word `Foodland` (they contain the same products anyway)
     "Foodland": () => import("./scraping/Foodland/data").then(mod => mod.default()),
-    "Lococo's": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Lococo's": () => import("./scraping/Lococo's/data").then(mod => mod.default()),
     "Zehrs": () => import("./scraping/Zehrs/data").then(mod => mod.default()), 
     "Walmart Supercentre": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
     "Avondale": () => [{
@@ -171,7 +165,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Foodland"]()
+        const products = await productData["Lococo's"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
