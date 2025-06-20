@@ -103,6 +103,14 @@ const getData = async (): Promise<Products> => {
                 const currentProducts = await mainFrameContent.$$(`div[sfml-content-wrap] sfml-flyer-image[sfml-anchor-id="${i}"] div button`)
                 // iterate through each filtered product and get the data we need
                 for (const currentProduct of currentProducts) {
+                    // get the aria label of a product
+                    const ariaLabel = await currentProduct.evaluate(el => el.ariaLabel)
+                    // if there is no aria label, then just skip the product
+                    if (!ariaLabel) continue
+                    // check if the current product is member only
+                    const isMemberOnly = /member(\s+)?pric(e|ing)/gi.test(ariaLabel)
+                    // if the product is member only, then skip it
+                    if (isMemberOnly) continue
                     // click on the button
                     // NOTE: 
                     // - DON'T use `currentProduct.click()` as it will make duplicate products

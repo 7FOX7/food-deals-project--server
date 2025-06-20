@@ -106,6 +106,10 @@ const getData = async (): Promise<Products> => {
                         el => el.ariaLabel ?? "",
                         currentProduct
                     )
+                    // check if the current product is member only
+                    const isMemberOnly = /member(\s+)?pric(e|ing)/gi.test(ariaLabel)
+                    // if the product is member only, then skip it
+                    if (isMemberOnly) continue
                     // check if the current product is on sale
                     const isOnSale = /SAVE/gi.test(ariaLabel)
                     // if it is not, just skip it
