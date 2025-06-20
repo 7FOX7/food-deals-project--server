@@ -21,7 +21,7 @@ const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scone
 const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun)\b/i
 
 // "Pantry & Essentials" regex
-const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj)\b/i
+const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj|lasagna)\b/i
 
 // will be storing function body (we will be using it when creating a function with 'Function' constructor)
 // NOTE: we wrap "${ProductCategories.FrozenAndPrepared}" in quotes so the value returned is a string
