@@ -76,13 +76,7 @@ category: ProductCategories.NoCategory
     "Kim's Variety": () => [],          // no data for this store 
     "Bombay Mart": () => import("./scraping/Bombay Mart/data").then(mod => mod.default()),
     "Polonia European Market & Deli": () => import("./scraping/Polonia European Market/data").then(mod => mod.default()),
-    "Eastern Food Market": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Eastern Food Market": () => import("./scraping/Eastern Food Market/data").then(mod => mod.default()),
     "Foodland": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -195,7 +189,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Polonia European Market & Deli"]()
+        const products = await productData["Eastern Food Market"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
