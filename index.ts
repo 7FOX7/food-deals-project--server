@@ -75,13 +75,7 @@ category: ProductCategories.NoCategory
     "The New Food Box": () => import("./scraping/New Food Box/data").then(mod => mod.default()),
     "Kim's Variety": () => [],          // no data for this store 
     "Bombay Mart": () => import("./scraping/Bombay Mart/data").then(mod => mod.default()),
-    "Polonia European Market & Deli": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Polonia European Market & Deli": () => import("./scraping/Polonia European Market/data").then(mod => mod.default()),
     "Eastern Food Market": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -201,7 +195,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Bombay Mart"]()
+        const products = await productData["Polonia European Market & Deli"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
