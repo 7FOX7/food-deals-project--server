@@ -77,13 +77,9 @@ category: ProductCategories.NoCategory
     "Bombay Mart": () => import("./scraping/Bombay Mart/data").then(mod => mod.default()),
     "Polonia European Market & Deli": () => import("./scraping/Polonia European Market/data").then(mod => mod.default()),
     "Eastern Food Market": () => import("./scraping/Eastern Food Market/data").then(mod => mod.default()),
-    "Foodland": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    // NOTE: 
+    // - `data` is shared between all stores that contain the word `Foodland` (they contain the same products anyway)
+    "Foodland": () => import("./scraping/Foodland/data").then(mod => mod.default()),
     "Lococo's": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -92,8 +88,6 @@ category: ProductCategories.NoCategory
 category: ProductCategories.NoCategory
     }],  
     "Zehrs": () => import("./scraping/Zehrs/data").then(mod => mod.default()), 
-    // NOTE: 
-    // - `data` is shared between all stores that start with `Walmart` (they contain the same products anyway)
     "Walmart Supercentre": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
     "Avondale": () => [{
         imageUri: "hello from product data (server)", 
@@ -102,13 +96,7 @@ category: ProductCategories.NoCategory
         primaryPrice: "4", 
 category: ProductCategories.NoCategory
     }],  
-    "Vineland Foodland - Supermarket": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Vineland Foodland - Supermarket": () => import("./scraping/Foodland/data").then(mod => mod.default()),
     "Pistachio's": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -119,13 +107,7 @@ category: ProductCategories.NoCategory
     "Jim's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Metro": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
-    "Chippawa Foodland": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Chippawa Foodland": () => import("./scraping/Foodland/data").then(mod => mod.default()),
     "Wholesale Club": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -189,7 +171,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Eastern Food Market"]()
+        const products = await productData["Foodland"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
