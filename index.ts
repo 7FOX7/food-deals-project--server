@@ -72,13 +72,7 @@ category: ProductCategories.NoCategory
     "Costco Wholesale": () => import("./scraping/Costco Wholesale/data").then(mod => mod.default()),
     "Brandon's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Pupo's Food Market": () => [],     // no data for this store  
-    "The New Food Box": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "The New Food Box": () => import("./scraping/New Food Box/data").then(mod => mod.default()),
     "Kim's Variety": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -219,7 +213,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Costco Wholesale"]()
+        const products = await productData["The New Food Box"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
