@@ -73,13 +73,7 @@ category: ProductCategories.NoCategory
     "Brandon's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Pupo's Food Market": () => [],     // no data for this store  
     "The New Food Box": () => import("./scraping/New Food Box/data").then(mod => mod.default()),
-    "Kim's Variety": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Kim's Variety": () => [],          // no data for this store 
     "Bombay Mart": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
