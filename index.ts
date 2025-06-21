@@ -24,7 +24,7 @@ const productData: ProductData = {
     "Food Basics": () => import("./scraping/Food Basics/data").then(mod => mod.default()), 
     "Metro Lakeshore": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "La Paisana Latin Groceries": () => import("./scraping/La Paisana/data").then(mod => mod.default()),
-    "Al Noor": () => [],      // no data for this store
+    "Al Noor": () => import("./scraping/Al Noor/data").then(mod => mod.default()),
     "Sobeys": () => import("./scraping/Sobeys/data").then(mod => mod.default()),
     "B & R European Deli": () => [],    // no data for this store
     "Roman Cheese": () => import("./scraping/Roman Cheese/data").then(mod => mod.default()),
@@ -119,7 +119,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Zest Mart"]()
+        const products = await productData["Al Noor"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
