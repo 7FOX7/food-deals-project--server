@@ -12,16 +12,16 @@ const meatProductsRegex = /\b(meat|beef|pork|chicken|turkey|lamb|goat|duck|venis
 const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|mozzarella|parmesan|cheddar|gouda|brie|feta|provolone|mascarpone|kefir|gelato|eggs?|omelette|quiche|frittata|custard|soufflé|cheesecake|dairy|butter|falooda|lactose|rognoni|formaggi|guffanti)\b/i
 
 // "Frozen & Prepared Foods" regex
-const frozenProductsRegex = /\b(frozen|prepared|ready|sambhar|patty|chaat|pav|jalebi)\b/i
+const frozenProductsRegex = /\b(frozen|prepared|ready|sambhar|patty|chaat|pav|jalebi|freeze|soup)\b/i
 
 // "Bakery & Breakfast" regex
 const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub|cannolis?|tortillas?|focaccias?)\b/i
 
 // "Snacks & Sweets" regex
-const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|pudding|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun|burger|dhoklas?|pakoras?|tikkis?|puri)\b/i
+const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|puddings?|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun|burger|dhoklas?|pakoras?|tikkis?|puri|jerky|gummies|cashews?|almonds?|peanuts?)\b/i
 
 // "Pantry & Essentials" regex
-const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj|lasagna|noodles?)\b/i
+const pantryProductsRegex = /\b(oils?|vinegar|sauces?|ketchup|mustard|mayonnaise|salad|honey|agave nectar|sugar|powder|salt|black pepper|white pepper|cayenne pepper|paprika|cumin|oregano|basil|thyme|rosemary|sage|parsley|cilantro|ginger|turmeric|cinnamon|cloves|cardamom|extract|baking soda|yeast|flour|bread|cornstarch|rice|pasta|quinoa|couscous|barley|cereal|dried beans|lentils|chickpeas|jelly|jam|seeds?|coffee|tea|spices|pani puri|papri chaat|bhel puri|babaghanouj|lasagna|noodles?|olives?|pickles?)\b/i
 
 // will be storing function body (we will be using it when creating a function with 'Function' constructor)
 // NOTE: we wrap "${ProductCategories.FrozenAndPrepared}" in quotes so the value returned is a string
