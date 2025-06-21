@@ -157,7 +157,7 @@ const getData = async (): Promise<Products> => {
                     // get units match 
                     const unitsMatch = description.match(unitsRegex)
                     // get the units
-                    const units = unitsMatch ? unitsMatch.join(" or ") : Unavailable.Units
+                    const units = unitsMatch ? unitsMatch.join(" or ").toLowerCase() : Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)
                     if (category === ProductCategories.NoCategory) continue
