@@ -27,13 +27,7 @@ const productData: ProductData = {
     // - `data` is shared between all stores that start with `Walmart` (they contain the same products anyway)
     "Walmart": () => import("./scraping/Walmart/data").then(mod => mod.default()),   
     "No Frills - Supermarket": () => import("./scraping/No Frills/data").then(mod => mod.default()),
-    "Dollarama": () => [{
-        imageUri: "No Frills - Supermarket", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Dollarama": () => import("./scraping/Dollarama/data").then(mod => mod.default()),
     "Busy Bee Food Mart": () => import("./scraping/Busy Bee/data").then(mod => mod.default()),
     "Outlet Collection at Niagara - Pepper Palace": () => import("./scraping/Pepper Palace/data").then(mod => mod.default()),
     "Your Deli": () => import("./scraping/Your Deli/data").then(mod => mod.default()),
@@ -141,7 +135,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Ebeano Super Market"]()
+        const products = await productData["Dollarama"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
