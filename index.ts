@@ -91,13 +91,7 @@ category: ProductCategories.NoCategory
     "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Chippawa Foodland": () => import("./scraping/Foodland/data").then(mod => mod.default()),
     "Wholesale Club": () => import("./scraping/Wholesale Club/data").then(mod => mod.default()),
-    "Ebeano Super Market": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],    
+    "Ebeano Super Market": () => import("./scraping/Ebeano Super Market/data").then(mod => mod.default()),
 }
 
 // will be updating products every night at 3AM
@@ -147,7 +141,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Wholesale Club"]()
+        const products = await productData["Ebeano Super Market"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
