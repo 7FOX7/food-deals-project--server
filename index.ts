@@ -4,22 +4,6 @@ import {schedule} from "node-cron"
 import {ProductData} from "./utils/types"
 import {STORE_NAMES} from "./utils/constants"
 
-// we will be storing food categories: 
-// NOTE: food categories MUST match 'FoodTypes' type from our client app
-enum ProductCategories {
-    FreshProduce = "Fresh Produce",
-    MeatAndSeafood = "Meat & Seafood", 
-    DairyAndEggs = "Dairy & Eggs", 
-    FrozenAndPrepared = "Frozen & Prepared Foods", 
-    BakeryAndBreakfast = "Bakery & Breakfast", 
-    SnacksAndSweets = "Snacks & Sweets", 
-    PantryAndEssentials = "Pantry & Essentials", 
-
-    // this category will be used as a placeholder for the product 
-    // whose food category does not match any of the above (DON'T USE IT IN YOUR client app)
-    NoCategory = "[NO CATEGORY]"
-}
-
 // TODO: create an object which is going to contain names of stores as keys
 // and an async function for fetching (or scraping) product data as values
 const productData: ProductData = {
