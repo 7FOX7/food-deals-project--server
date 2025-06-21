@@ -88,9 +88,11 @@ const getData = async (): Promise<Products> => {
                 const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
                 
                 return divProducts.flatMap(div => {
+                    // get the title
                     const title = div.querySelector("h3.css-6qrhwc")?.textContent?.trim() ?? Unavailable.Title
-                    // get the primary price and remove all the '$' from it
-                    const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                    // get the primary price
+                    const primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? div.querySelector("span.css-pwnbcb")?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                    // get the units
                     const units = div.querySelector("p.css-1yftjin")?.textContent?.trim() ?? Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                     const category: ProductCategories = getProductCategory(title)

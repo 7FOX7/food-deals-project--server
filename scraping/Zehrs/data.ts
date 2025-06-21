@@ -99,7 +99,7 @@ const getData = async (): Promise<Products> => {
                         primaryPrice = `${div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim()} OR ${multiBuyPrice} ea`
                     } else {
                         // get a single price
-                        primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? Unavailable.PrimaryPrice
+                        primaryPrice = div.querySelector("span.css-o93gbd")?.lastChild?.textContent?.trim() ?? div.querySelector("span.css-pwnbcb")?.textContent?.trim() ?? Unavailable.PrimaryPrice
                     }
                     // get the units
                     const units = div.querySelector("p.css-1yftjin")?.textContent?.trim() ?? Unavailable.Units
