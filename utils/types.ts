@@ -88,6 +88,6 @@ export type ProductData = {
     "Metro": () => Promise<Products>,  
     "Mark's No Frills": () => Promise<Products>,  
     "Chippawa Foodland": () => Promise<Products>,
-    "Wholesale Club": () => Products,  
+    "Wholesale Club": () => Promise<Products>, 
     "Ebeano Super Market": () => Products,  
 }

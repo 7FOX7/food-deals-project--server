@@ -90,13 +90,7 @@ category: ProductCategories.NoCategory
     "Metro": () => import("./scraping/Metro/data").then(mod => mod.default()),
     "Mark's No Frills": () => import("./scraping/No Frills/data").then(mod => mod.default()),
     "Chippawa Foodland": () => import("./scraping/Foodland/data").then(mod => mod.default()),
-    "Wholesale Club": () => [{
-        imageUri: "hello from product data (server)", 
-        title: "hello from product data (server)", 
-        units: "hello from product data (server)", 
-        primaryPrice: "4", 
-category: ProductCategories.NoCategory
-    }],  
+    "Wholesale Club": () => import("./scraping/Wholesale Club/data").then(mod => mod.default()),
     "Ebeano Super Market": () => [{
         imageUri: "hello from product data (server)", 
         title: "hello from product data (server)", 
@@ -153,7 +147,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Lococo's"]()
+        const products = await productData["Wholesale Club"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
