@@ -33,7 +33,7 @@ const productData: ProductData = {
     "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store": () => [],    // no data for this store
     "Commisso's Fresh Food": () => import("./scraping/Commisso's Fresh Food/data").then(mod => mod.default()),
     "Farm Boy": () => import("./scraping/Farm Boy/data").then(mod => mod.default()),
-    "Thai Binh Asian Food": () => [],       // no data for this store 
+    "Thai Binh Asian Food": () => import("./scraping/Thai Binh/data").then(mod => mod.default()),
     "The Red Barn Farm Market and Bakery": () => [],  
     "Independent Grocery store - Phil's": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "Charlie Asian Grocery Inc.": () => [],  // no data for this store 
@@ -119,7 +119,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Dinh Dinh Asian Foods"]()
+        const products = await productData["Thai Binh Asian Food"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
