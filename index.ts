@@ -37,7 +37,7 @@ const productData: ProductData = {
     "The Red Barn Farm Market and Bakery": () => import("./scraping/The Red Barn/data").then(mod => mod.default()),  
     "Independent Grocery store - Phil's": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
     "Charlie Asian Grocery Inc.": () => [],  // no data for this store 
-    "Patty's Delights Peruvian Culinary": () => [],         // no data for this store  
+    "Patty's Delights Peruvian Culinary": () => import("./scraping/Patty's Delights/data").then(mod => mod.default()),  
     "Gallagher's": () => import("./scraping/Gallagher's/data").then(mod => mod.default()),
     "Raja Grocers": () => import("./scraping/Raja Grocers/data").then(mod => mod.default()),
     "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
@@ -119,7 +119,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["The Red Barn Farm Market and Bakery"]()
+        const products = await productData["Patty's Delights Peruvian Culinary"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
