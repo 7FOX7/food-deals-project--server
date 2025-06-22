@@ -42,7 +42,7 @@ const productData: ProductData = {
     "Raja Grocers": () => import("./scraping/Raja Grocers/data").then(mod => mod.default()),
     "Peanut Mill": () => import("./scraping/Peanut Mill/data").then(mod => mod.default()),
     "Joe's Your Independent Grocer": () => import("./scraping/Independent Grocery/data").then(mod => mod.default()),
-    "The Indian Valley": () => [],          // no data for this store  
+    "The Indian Valley": () => import("./scraping/The Indian Valley/data").then(mod => mod.default()),
     "Real Canadian Superstore": () => import("./scraping/Superstore/data").then(mod => mod.default()),
     "Bodner's Market": () => [],            // no data for this store 
     "Food Basket": () => import("./scraping/Food Basket/data").then(mod => mod.default()),
@@ -119,7 +119,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Patty's Delights Peruvian Culinary"]()
+        const products = await productData["The Indian Valley"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
