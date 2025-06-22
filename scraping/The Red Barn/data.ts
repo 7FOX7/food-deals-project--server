@@ -1,3 +1,9 @@
+/*
+    NOTE: 
+    - For the sake of simplicity: 
+    - `data` is extracted from Fresh Market store (section fruit and vegetables) because there is no data with products for `The Red Barn Farm Market and Bakery` store
+*/
+
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
 import { getProductCategory__funcBody, unitsRegex } from "../../utils/regexes"
