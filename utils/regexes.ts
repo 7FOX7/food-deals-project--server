@@ -15,7 +15,7 @@ const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|m
 const frozenProductsRegex = /\b(frozen|prepared|ready|sambhar|patty|chaat|pav|jalebi|freeze|soups?|shawarmas?|bbq|instant|curry|dumplings?|bibimmen)\b/i
 
 // "Bakery & Breakfast" regex
-const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub|cannolis?|tortillas?|focaccias?)\b/i
+const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub|cannolis?|tortillas?|focaccias?|crackers?)\b/i
 
 // "Snacks & Sweets" regex
 const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|puddings?|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun|burger|dhoklas?|pakoras?|tikkis?|puri|jerky|gummies|cashews?|almonds?|peanuts?|falafel|aloe|mochi)\b/i
@@ -56,4 +56,4 @@ export const getProductCategory__funcBody = `
 // `1 grade 44 g` - only `44 g` will pass (because there is a word boundary)
 // `44-256 ML` - pass (`-` is allowed between the digits)
 // `17.24 kg` - pass (`.` is allowed between the digits)
-export const unitsRegex = /\b(\d+(\s+)?(\.|\-|x|×|\/)(\s+)?)?(\d+)(\s+)?(\/(\s+)?)?(kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece|oz|cans?|pcs?)\b/ig
+export const unitsRegex = /\b(\d+(\s+)?(\.|\-|x|×|\/)(\s+)?)?(\d+)(\s+)?(\/(\s+)?)?(kg|g|ea|ml|l|gm|pk|cnt|packs?|lb|litre|piece|oz|cans?|pcs?|gr)\b/ig
