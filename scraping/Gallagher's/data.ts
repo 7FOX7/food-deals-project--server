@@ -73,18 +73,18 @@ const getData = async (): Promise<Products> => {
             }
             // This will create a new function which will be accepting 'productTitle'
             const getProductCategory = new Function("productTitle", getProductCategory__funcBody)
+            // uncomment for debugging:
+            let pageNum = 1
             // start function execution
             return await addProducts()
-            // uncomment for debugging:
-            // let pageNum = 1
 
             // recursive function we will be calling every time
             // to go to the next page (there are no products left in the current page)
             async function addProducts() {
                 try {
                     // uncomment for debugging:
-                    // console.log("page: " + pageNum)
-                    // pageNum += 1
+                    console.log("page: " + pageNum)
+                    pageNum += 1
                     // wait for the container
                     await page.waitForSelector("div[data-ux=Grid]", { visible: true })
                     // check if we should add more products to the array: 
@@ -123,7 +123,7 @@ const getData = async (): Promise<Products> => {
                         // if there is a valid product then push it to the array
                         product && products.push(product)
                         // uncomment for debugging:
-                        // console.log(`title: ${title}`)
+                        console.log(`title: ${title}`)
                     }  
 
                     // wait for the product container
@@ -142,7 +142,7 @@ const getData = async (): Promise<Products> => {
                         page.waitForNavigation()
                     ])
                     // wait for a bit, otherwise, there might be duplicates
-                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    await new Promise(resolve => setTimeout(resolve, 4000))
                     // call the function again
                     return await addProducts()
                 }
