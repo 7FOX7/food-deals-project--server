@@ -195,12 +195,12 @@ const getData = async (): Promise<Products> => {
             // SECOND PART OF PRODUCT EXTRACTION: 
             // go to the next page
             await page.goto("https://www.farmboy.ca/weekly-flyer-specials/simple-flyer/?region=Flyer%20Version%201&store=Cornwall&preview=false", {
-                waitUntil: "load"
+                waitUntil: "domcontentloaded"
             })
             // wait for the list of products
             await page.waitForSelector("ul[id=weekly-flyer-specials]")
             // iterate through each value of the main list, and store all products in the `otherProducts`
-            const otherProducts = await page.$eval("ul[id=weekly-flyer-specials]", (list, getProductCategory__funcBody) => {
+            const otherProducts = await page.$eval("ul[id=weekly-flyer-specials]", (list, getProductCategory__funcBody, unitsRegexString) => {
                 // will be storing local products
                 // NOTE: 
                 // - you will then return local products and push them to the global products
@@ -232,7 +232,7 @@ const getData = async (): Promise<Products> => {
                     // get the price of the current food 
                     const primaryPrice = prices.item(i).textContent?.replace(/\s+/g, " ").trim() ?? Unavailable.PrimaryPrice
                     // get units match 
-                    const unitsMatch = title.match(unitsRegex)
+                    const unitsMatch = title.match(new RegExp(unitsRegexString, "ig"))
                     // get the units
                     const units = unitsMatch ? unitsMatch.join(" or ").toLowerCase() : Unavailable.Units
                     // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
@@ -254,7 +254,7 @@ const getData = async (): Promise<Products> => {
                 // NOTE: 
                 // - you then need to add them to the global products
                 return localProducts
-            }, getProductCategory__funcBody)
+            }, getProductCategory__funcBody, unitsRegex.source)
 
             // push other products to the global products
             products.push(...otherProducts)
