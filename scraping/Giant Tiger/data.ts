@@ -42,7 +42,8 @@ const getData = async (): Promise<Products> => {
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
-
+    // set the warning interval
+    const interval = setInterval(() => console.warn("Allow location for `Giant Tiger` store!"), 1000)
     // recursive function we will be calling every time
     // to go to the next page (there are no products left in the current page)
     const addProducts = async (pageNum: number): Promise<Products> => {
@@ -86,6 +87,8 @@ const getData = async (): Promise<Products> => {
             }
             // wait for the selector
             await page.waitForSelector("div.collection__products")
+            // clear the interval once the selector is shown on the page
+            clearInterval(interval)
             // get collection products
             const collectionProducts = await page.$eval("div.collection__products", collection => collection.outerHTML)
             // if there is no collection products (meaning there are no products in the current page), then just return products
@@ -142,6 +145,8 @@ const getData = async (): Promise<Products> => {
         }  
         // will be executed regardless
         finally {
+            // clear the interval (so there is no memory leak)
+            clearInterval(interval)
             // close the browser
             await browser.close()
         }
