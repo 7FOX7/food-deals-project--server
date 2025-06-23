@@ -15,7 +15,7 @@ const dairyProductsRegex = /\b(milk|cheese|yogurt|cream|cottage cheese|ricotta|m
 const frozenProductsRegex = /\b(frozen|prepared|ready|sambhar|patty|chaat|pav|jalebi|freeze|soups?|shawarmas?|bbq|instant|curry|dumplings?|bibimmen|patra|rasmalai|mdh)\b/i
 
 // "Bakery & Breakfast" regex
-const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub|cannolis?|tortillas?|focaccias?|crackers?|kulcha|paratha)\b/i
+const bakeryProductsRegex = /\b(breads?|buns?|croissants?|bagels?|muffins?|scones?|pancakes?|waffles?|toasts?|biscuits?|danish(es)?|pastry|pastries|rolls?|cakes?|brownies?|cookies?|doughnuts?|pies?|tarts?|quiche|granola|cereal|oats?|porridge|breakfast|jam|jelly|syrup|smoothie bowl|cinnamon roll|coffee|sourdough|flatbread|ciabatta|focaccia|samosas?|vada pav|dilbahaar|sub|cannolis?|tortillas?|focaccias?|crackers?|kulcha|paratha|naan)\b/i
 
 // "Snacks & Sweets" regex
 const snacksProductsRegex = /\b(chips|pretzels|popcorn|cakes?|nachos|cheese puffs|nuts?|trail mix|snacks?|bars?|chocolates?|brownies|cookies?|biscotti|macarons|meringues?|puddings?|gelato|sorbet|gum|bubblegum|cand(y|ies)?|lollipops|taffy|marshmallows?|snickers?|milky way|twix|kit kat|caramel|s'mores|churros|biscuits?|mini quiches|dried fruits?|motichur laddu|kulfi rolls?|rasgullas|burfi|gulab jamun|burger|dhoklas?|pakoras?|tikkis?|puri|jerky|gummies|cashews?|almonds?|peanuts?|falafel|aloe|mochi|kurkure)\b/i
