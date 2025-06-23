@@ -37,11 +37,6 @@ const getData = async (): Promise<Products> => {
     const browser = await puppeteer.launch({
         headless: false
     })
-    // NOTE: 
-    // - this value will be used to determine if we should look for the `next` button at all
-    // - if the number of products for the current page is less than this number, then we need to just return existing products (we cannot go to the next page)
-    const EXPECTED_NUM_OF_PRODUCTS_PER_PAGE = 24
-    // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
 
@@ -122,12 +117,10 @@ const getData = async (): Promise<Products> => {
                         // console.log(`title: ${title}`)
                     }  
 
-                    // wait for the product container
-                    await page.waitForSelector("ul[id=product-grid]", { visible: true })
-                    // get the number of products for the current page
-                    const productsCount = await page.$eval("ul[id=product-grid]", div => div.querySelectorAll("li.grid__item").length)
+                    // get the navigation container
+                    await page.waitForSelector("nav.pagination ul.pagination__list", { visible: true })
                     // check if this is the last page (then we don't need to wait for the `next` button)
-                    const isLastPage = productsCount < EXPECTED_NUM_OF_PRODUCTS_PER_PAGE
+                    const isLastPage = await page.$eval("nav.pagination ul.pagination__list", div => div.querySelector("a.pagination__item--prev") === null)
                     // if this is the last page, then just return existing products
                     if (isLastPage) return products
                     // wait for the `next` button
@@ -135,7 +128,7 @@ const getData = async (): Promise<Products> => {
                     // click on the `next` button and wait for navigation
                     await Promise.all([
                         page.click("ul.pagination__list a.pagination__item--prev"), 
-                        // page.waitForNavigation()
+                        // page.waitForNavigation()     this will not work (it will navigate to the next page, it never recognizes that we navigated to the next page)
                     ])
                     // wait for a bit, otherwise, there might be duplicates
                     // await new Promise(resolve => setTimeout(resolve, 2000))
