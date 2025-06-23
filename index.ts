@@ -73,53 +73,61 @@ const productData: ProductData = {
 }
 
 // will be updating products every night at 3AM
-function updateProducts() {
-    console.log("will promise to update products at 3AM")
-
-    // schedule a cron job to run every night at 3AM
-    schedule("8 * * * *", async () => {
-        try {
-            // get the products 
-            for (let storeName of STORE_NAMES) {
-                // skip adding products for this store as it will break our loop
-                if (storeName === "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store") continue
-                // skip adding products for this store
-                if (storeName === "Walmart Supercentre") continue
-                // if current store is Walmart, then add the same products to the Walmart Supercentre (they have the same products anyway)
-                if (storeName === "Walmart") {
-                    const products = await productData[storeName]()
-                    // create a collection reference
-                    const collectionRef = collection(db, "/stores-and-products")
-                    // add products for Walmart
-                    await Promise.all([
-                        setDoc(doc(collectionRef, "Walmart"), { products }), 
-                        // add the same products for Walmart Supercentre
-                        setDoc(doc(collectionRef, "Walmart Supercentre"), { products })
-                    ])
-                    // go to the next
-                    continue
-                }
+async function updateProducts() {
+    try {
+        console.log("🌀 Started product update...")
+        // create a collection reference
+        const collectionRef = collection(db, "/stores-and-products")
+        // get the products 
+        for (let storeName of STORE_NAMES) {
+            // skip adding products for this store as it will break our loop
+            if (storeName === "Yogibear's Jellystone Park Camp Resort- Ice Cream/Convenience Store") continue
+            // if the current store is Walmart, then update all the products for stores that contain the word 'Walmart'
+            else if (storeName === "Walmart") {
+                // extract the products
+                const products = await productData[storeName]()
+                // add the same products for Foodland stores
+                await Promise.all([
+                    setDoc(doc(collectionRef, "Walmart"), { products }), 
+                    setDoc(doc(collectionRef, "Walmart Supercentre"), { products })
+                ])
+            }
+            // if the current store is Foodland, then update all the products for stores that contain the word 'Foodland'
+            else if (storeName === "Foodland") {
+                // extract the products
+                const products = await productData[storeName]()
+                // add the same products for Foodland stores
+                await Promise.all([
+                    setDoc(doc(collectionRef, "Foodland"), { products }), 
+                    setDoc(doc(collectionRef, "Chippawa Foodland"), { products }), 
+                    setDoc(doc(collectionRef, "Vineland Foodland - Supermarket"), { products })
+                ])
+            }
+            // if the current store contains the word 'Walmart', then skip this store
+            else if (/walmart/gi.test(storeName)) continue
+            // if the current store contains the word 'Foodland', then skip this store
+            else if (/foodland/gi.test(storeName)) continue
+            // for all other stores
+            else {
                 // get products
                 const products = await productData[storeName]()
-                // create a collection reference
-                const collectionRef = collection(db, "/stores-and-products")
-                
                 // add products to the document: 
                 await setDoc(doc(collectionRef, storeName), { products })
             }
-            // log a message after adding all stores and products
-            console.log("Successfully added all stores and products!")
+            console.log(`✅ Data for store: ${storeName} was successfully added to db`)
         }
-        catch (err: any) {
-            console.error("Failed to update products: " + err.message)
-        }
-    })
+        // log a message after adding all stores and products
+        console.log("💫 Successfully added all stores and products!")
+    }
+    catch (err: any) {
+        console.error("Failed to update products: " + err.message)
+    }
 }
 
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["Eastern Food Market"]()
+        const products = await productData["Gallagher's"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
@@ -128,8 +136,8 @@ async function testProducts() {
     }   
 }
 
-testProducts()
-// updateProducts()
+// testProducts()
+updateProducts()
 
 /*
     1. Question: firebase-config.ts file - will I be able to to import the variables from it in my APIs, or not (when preparing my project for production)?
