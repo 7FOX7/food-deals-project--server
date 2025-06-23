@@ -43,6 +43,8 @@ const getData = async (): Promise<Products> => {
     // recursive function we will be calling every time
     // to go to the next page (there are no products left in the current page)
     const addProducts = async (): Promise<Products> => {
+        // set the warning interval
+        const interval = setInterval(() => console.warn("Click on the `flyer` button to see the flyer and allow location tracking (Sobeys store)"), 1000)
         try {
             // connect to the specified url (watch page number)
             const response = await page.goto(`https://sobeys.com/en/flyer/`, {
@@ -72,6 +74,8 @@ const getData = async (): Promise<Products> => {
             // NOTE: 
             // - this is where ALL the products will appear
             const mainFrame = await page.waitForSelector("iframe.mainframe")
+            // clear the interval once the selector is shown on the page
+            clearInterval(interval)
             if (!mainFrame) throw new Error("`iframe.mainframe` is not found")
             // get the main frame content
             const mainFrameContent = await mainFrame.contentFrame()
@@ -184,6 +188,8 @@ const getData = async (): Promise<Products> => {
         }  
         // will be executed regardless
         finally {
+            // clear the interval (so there is no memory leak)
+            clearInterval(interval)
             // close the browser
             await browser.close()
         }
