@@ -68,10 +68,6 @@ const getData = async (): Promise<Products> => {
     const browser = await puppeteer.launch({
         headless: false
     })
-    // NOTE: 
-    // - this value will be used to determine if we should look for the `next` button at all
-    // - if the number of products for the current page is less than this number, then we need to just return existing products (we cannot go to the next page)
-    const EXPECTED_NUM_OF_PRODUCTS_PER_PAGE = 24
     // TODO: add a cron job logic
     // create a new page
     const page = await browser.newPage()
@@ -159,17 +155,23 @@ const getData = async (): Promise<Products> => {
                 // if we reached the limit for the current food category, then just return (stop adding products to the array)
                 if (foodCount >= limit) return
             }
-            // get the number of products for the current page
-            const productsCount = await page.$eval("div.product-list", div => div.querySelectorAll("div.product-tile-set").length)
+            // check if there is no a page container 
+            const noPageContainer = await page.evaluate(() => {
+                return document.querySelector("nav div.paging") === null
+            })
+            // if there is no a page container (meaning this is the only page, then just return)
+            if (noPageContainer) return
+            // get the navigation container
+            await page.waitForSelector("nav div.paging", { visible: true })
             // check if this is the last page (then we don't need to wait for the `next` button)
-            const isLastPage = productsCount < EXPECTED_NUM_OF_PRODUCTS_PER_PAGE
-            // if this is the last page, then just return
-            if (isLastPage) return 
+            const isLastPage = await page.$eval("nav div.paging", div => div.querySelector("li.forward a") === null)
+            // if this is the last page, then just return existing products
+            if (isLastPage) return products
             // wait for the `next` button
-            await page.waitForSelector("ul.text-center li.forward a", { visible: true, timeout: 10000 })
+            await page.waitForSelector("nav div.paging li.forward a", { visible: true })
             // click on the `next` button and wait for navigation
             await Promise.all([
-                page.click("ul.text-center li.forward a"), 
+                page.click("nav div.paging li.forward a"), 
                 page.waitForNavigation()
             ])
             // call the function again
