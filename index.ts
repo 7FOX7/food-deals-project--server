@@ -119,7 +119,7 @@ function updateProducts() {
 async function testProducts() {
     console.log("will promise to execute!")
     try {
-        const products = await productData["The Indian Valley"]()
+        const products = await productData["Eastern Food Market"]()
         console.log("products: " + JSON.stringify(products))
         console.log("products length: " + products.length)
     }
