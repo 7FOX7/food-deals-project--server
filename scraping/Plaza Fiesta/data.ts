@@ -88,7 +88,7 @@ const getData = async (): Promise<Products> => {
     // create a new page
     const page = await browser.newPage()
     // get the length of all products
-    console.log("all products length: " + foods.length)
+    console.log("all products length (Plaza Fiesta Latin Grocery and Cafe): " + foods.length)
     // recursive function we will be calling every time
     // to go to the next page (there are no products left in the current page)
     const addProducts = async (): Promise<Products> => {
