@@ -103,7 +103,7 @@ const getData = async (): Promise<Products> => {
                         // get the title 
                         const title = await currentProduct.evaluate(el => el.querySelector("h4[data-ux=CommerceCardTitle]")?.textContent?.trim()) ?? Unavailable.Title
                         // get the price
-                        const primaryPrice = await currentProduct.evaluate(el => el.querySelector("div[data-ux=CommerceItemPrice]")?.textContent?.replace(/C/gi, "").trim()) ?? Unavailable.PrimaryPrice
+                        const primaryPrice = await currentProduct.evaluate(el => el.querySelector("div[data-ux=CommerceCardPriceDisplay]")?.textContent?.replace(/C/gi, "").replace(/from/gi, "From ").trim()) ?? Unavailable.PrimaryPrice
                         // get units match 
                         const unitsMatch = title.match(unitsRegex)
                         // get the units
@@ -142,7 +142,7 @@ const getData = async (): Promise<Products> => {
                         page.waitForNavigation()
                     ])
                     // wait for a bit, otherwise, there might be duplicates
-                    await new Promise(resolve => setTimeout(resolve, 4000))
+                    await new Promise(resolve => setTimeout(resolve, 3000))
                     // call the function again
                     return await addProducts()
                 }
