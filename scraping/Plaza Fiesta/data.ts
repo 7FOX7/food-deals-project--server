@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer"
 import { Products, Product } from "../../utils/types" 
-import { getProductCategory__funcBody } from "../../utils/regexes"
+import { getProductCategory__funcBody, unitsRegex } from "../../utils/regexes"
 import * as constants from "../../utils/constants"
 
 // will be searching through each of this food
@@ -147,15 +147,14 @@ const getData = async (): Promise<Products> => {
                 if (isContainerEmpty) continue
                 // wait for selector
                 await page.waitForSelector("div.grid-product__wrapper")
-                // check if the product is sold out
-                const isSoldOut = await page.$eval("div.grid-product__wrapper", div => div.querySelector("div.grid-product__sold-out"))
-                if (isSoldOut) continue
                 // get the title of the first product that match input
                 const title = await page.$eval("span.grid-product__title", div => div.textContent?.trim()) ?? Unavailable.Title
                 // get the title of the first product that match input
-                const primaryPrice = await page.$eval("span.grid-product__price", span => span.innerText?.replace(/(regular price)|(\n+)/gi, "").trim()) ?? Unavailable.PrimaryPrice
-                // units will be empty this time
-                const units = Unavailable.Units
+                const primaryPrice = await page.$eval("span.grid-product__price", span => span.innerText?.replace(/(regular price)|(\n+)|\+/gi, "").trim()) ?? Unavailable.PrimaryPrice
+                // get units match 
+                const unitsMatch = title.match(unitsRegex)
+                // get the units
+                const units = unitsMatch ? unitsMatch.join(" or ").toLowerCase() : Unavailable.Units
                 // 'getProductCategory' will be returning a product category from one of the enum values from 'ProductCategories' 
                 let category: ProductCategories = getProductCategory(title)
                 // - if title ends with '...' (meaning the title is too long), then skip adding this product
